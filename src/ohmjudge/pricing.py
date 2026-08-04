@@ -36,9 +36,7 @@ def load_prices(path: str | None) -> dict[tuple[str, str], Price]:
             output_per_million=float(item["output_per_million"]),
             currency=str(item.get("currency", "USD")),
             source=str(item["source"]) if item.get("source") else None,
-            verified_at=(
-                str(item["verified_at"]) if item.get("verified_at") else None
-            ),
+            verified_at=(str(item["verified_at"]) if item.get("verified_at") else None),
         )
         if price.input_per_million < 0 or price.output_per_million < 0:
             raise ValueError("pricing values must be non-negative")
@@ -46,9 +44,7 @@ def load_prices(path: str | None) -> dict[tuple[str, str], Price]:
     return prices
 
 
-def calculate_cost(
-    usage: dict[str, int], price: Price | None
-) -> float | None:
+def calculate_cost(usage: dict[str, int], price: Price | None) -> float | None:
     if price is None:
         return None
     has_input = "input_tokens" in usage or "prompt_tokens" in usage

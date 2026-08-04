@@ -1,0 +1,138 @@
+{
+  "baseline": {
+    "model": "NanoRelay-1",
+    "provider": "synthetic",
+    "records": 50
+  },
+  "by_pack": {
+    "circuits": {
+      "accuracy_delta": 0.20000000000000007,
+      "baseline_accuracy": 0.6,
+      "baseline_only_correct": 1,
+      "both_correct": 2,
+      "challenger_accuracy": 0.8,
+      "challenger_only_correct": 2,
+      "mcnemar_exact_p": 1.0,
+      "neither_correct": 0,
+      "paired_tasks": 5
+    },
+    "communications": {
+      "accuracy_delta": 0.6,
+      "baseline_accuracy": 0.4,
+      "baseline_only_correct": 0,
+      "both_correct": 2,
+      "challenger_accuracy": 1.0,
+      "challenger_only_correct": 3,
+      "mcnemar_exact_p": 0.25,
+      "neither_correct": 0,
+      "paired_tasks": 5
+    },
+    "control": {
+      "accuracy_delta": 0.19999999999999996,
+      "baseline_accuracy": 0.8,
+      "baseline_only_correct": 0,
+      "both_correct": 4,
+      "challenger_accuracy": 1.0,
+      "challenger_only_correct": 1,
+      "mcnemar_exact_p": 1.0,
+      "neither_correct": 0,
+      "paired_tasks": 5
+    },
+    "digital": {
+      "accuracy_delta": 0.0,
+      "baseline_accuracy": 0.4,
+      "baseline_only_correct": 0,
+      "both_correct": 2,
+      "challenger_accuracy": 0.4,
+      "challenger_only_correct": 0,
+      "mcnemar_exact_p": 1.0,
+      "neither_correct": 3,
+      "paired_tasks": 5
+    },
+    "electromagnetics": {
+      "accuracy_delta": 0.0,
+      "baseline_accuracy": 0.8,
+      "baseline_only_correct": 1,
+      "both_correct": 3,
+      "challenger_accuracy": 0.8,
+      "challenger_only_correct": 1,
+      "mcnemar_exact_p": 1.0,
+      "neither_correct": 0,
+      "paired_tasks": 5
+    },
+    "electronics": {
+      "accuracy_delta": 0.20000000000000007,
+      "baseline_accuracy": 0.6,
+      "baseline_only_correct": 0,
+      "both_correct": 3,
+      "challenger_accuracy": 0.8,
+      "challenger_only_correct": 1,
+      "mcnemar_exact_p": 1.0,
+      "neither_correct": 1,
+      "paired_tasks": 5
+    },
+    "embedded": {
+      "accuracy_delta": 0.6,
+      "baseline_accuracy": 0.4,
+      "baseline_only_correct": 0,
+      "both_correct": 2,
+      "challenger_accuracy": 1.0,
+      "challenger_only_correct": 3,
+      "mcnemar_exact_p": 0.25,
+      "neither_correct": 0,
+      "paired_tasks": 5
+    },
+    "instrumentation": {
+      "accuracy_delta": 0.6,
+      "baseline_accuracy": 0.4,
+      "baseline_only_correct": 0,
+      "both_correct": 2,
+      "challenger_accuracy": 1.0,
+      "challenger_only_correct": 3,
+      "mcnemar_exact_p": 0.25,
+      "neither_correct": 0,
+      "paired_tasks": 5
+    },
+    "power": {
+      "accuracy_delta": 0.20000000000000007,
+      "baseline_accuracy": 0.6,
+      "baseline_only_correct": 1,
+      "both_correct": 2,
+      "challenger_accuracy": 0.8,
+      "challenger_only_correct": 2,
+      "mcnemar_exact_p": 1.0,
+      "neither_correct": 0,
+      "paired_tasks": 5
+    },
+    "signals": {
+      "accuracy_delta": 0.6,
+      "baseline_accuracy": 0.0,
+      "baseline_only_correct": 0,
+      "both_correct": 0,
+      "challenger_accuracy": 0.6,
+      "challenger_only_correct": 3,
+      "mcnemar_exact_p": 0.25,
+      "neither_correct": 2,
+      "paired_tasks": 5
+    }
+  },
+  "challenger": {
+    "model": "CopperFox-4",
+    "provider": "synthetic",
+    "records": 50
+  },
+  "overall": {
+    "accuracy_delta": 0.31999999999999995,
+    "baseline_accuracy": 0.5,
+    "baseline_only_correct": 3,
+    "both_correct": 22,
+    "challenger_accuracy": 0.82,
+    "challenger_only_correct": 19,
+    "mcnemar_exact_p": 0.0008554458618164062,
+    "neither_correct": 6,
+    "paired_tasks": 50
+  },
+  "statistically_clear_at_0_05": true,
+  "warnings": [],
+  "winner_by_observed_accuracy": "challenger"
+}

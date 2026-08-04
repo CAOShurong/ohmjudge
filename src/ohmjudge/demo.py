@@ -4,6 +4,8 @@ import json
 import random
 from pathlib import Path
 
+from .audit import audit_experiment
+from .compare import compare_models
 from .generate import generate_tasks, suite_commitment
 from .grade import grade_responses
 from .io import write_json, write_jsonl
@@ -12,7 +14,6 @@ from .models import ModelResponse
 from .pricing import load_prices, price_metadata
 from .report import render_report
 
-
 _PROFILES = (
     ("synthetic", "CopperFox-4", 0.88, 1450.0, 820, 92),
     ("synthetic", "SiliconMist-2", 0.72, 620.0, 690, 68),
@@ -20,7 +21,9 @@ _PROFILES = (
 )
 
 
-def build_demo(directory: str | Path, *, seed: int = 2026, count: int = 40) -> dict[str, Path]:
+def build_demo(
+    directory: str | Path, *, seed: int = 2026, count: int = 50
+) -> dict[str, Path]:
     root = Path(directory)
     root.mkdir(parents=True, exist_ok=True)
     tasks = generate_tasks(count=count, seed=seed)
@@ -40,7 +43,10 @@ def build_demo(directory: str | Path, *, seed: int = 2026, count: int = 40) -> d
                 text = json.dumps({"answer": expected, "unit": "bananas"})
             else:
                 text = json.dumps(
-                    {"answer": expected * rng.choice([0.5, 0.8, 1.2, 2.0]), "unit": unit}
+                    {
+                        "answer": expected * rng.choice([0.5, 0.8, 1.2, 2.0]),
+                        "unit": unit,
+                    }
                 )
             responses.append(
                 ModelResponse(
@@ -99,12 +105,34 @@ def build_demo(directory: str | Path, *, seed: int = 2026, count: int = 40) -> d
     prompts_path = root / "prompts.public.jsonl"
     responses_path = root / "responses.synthetic.jsonl"
     grades_path = root / "grades.synthetic.jsonl"
+    audit_path = root / "audit.synthetic.json"
+    comparison_path = root / "comparison.synthetic.json"
     report_path = root / "report.html"
     lab_path = root / "no-api-lab.html"
     write_jsonl(tasks_path, (task.to_dict() for task in tasks))
     write_jsonl(prompts_path, (task.to_dict(public=True) for task in tasks))
     write_jsonl(responses_path, (response.to_dict() for response in responses))
     write_jsonl(grades_path, (grade.to_dict() for grade in grades))
+    write_json(
+        audit_path,
+        audit_experiment(
+            tasks,
+            responses=responses,
+            grades=grades,
+            prices=prices,
+            require_complete=True,
+        ),
+    )
+    write_json(
+        comparison_path,
+        compare_models(
+            grades,
+            baseline_provider="synthetic",
+            baseline_model="NanoRelay-1",
+            challenger_provider="synthetic",
+            challenger_model="CopperFox-4",
+        ),
+    )
     render_report(
         grades,
         report_path,
@@ -123,6 +151,8 @@ def build_demo(directory: str | Path, *, seed: int = 2026, count: int = 40) -> d
         "prompts": prompts_path,
         "responses": responses_path,
         "grades": grades_path,
+        "audit": audit_path,
+        "comparison": comparison_path,
         "report": report_path,
         "lab": lab_path,
         "pricing": pricing_path,

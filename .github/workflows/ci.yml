@@ -18,7 +18,7 @@ jobs:
         python: ["3.11", "3.13"]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
@@ -29,6 +29,6 @@ jobs:
       - name: Smoke-test CLI and deterministic artifacts
         run: |
           ohmjudge doctor
-          ohmjudge generate --count 20 --seed 2026 --output tasks.private.jsonl --public-output prompts.public.jsonl
+          ohmjudge generate --count 50 --seed 2026 --output tasks.private.jsonl --public-output prompts.public.jsonl
           ohmjudge lab --tasks tasks.private.jsonl --output ohmjudge-lab.html
-          ohmjudge demo --count 20 --seed 2026 --output build/demo
+          ohmjudge demo --count 50 --seed 2026 --output build/demo

@@ -28,9 +28,7 @@ class ParseTests(unittest.TestCase):
 
 class GradeTests(unittest.TestCase):
     def setUp(self) -> None:
-        self.task = generate_tasks(
-            pack_names=["circuits"], count=1, seed=18
-        )[0]
+        self.task = generate_tasks(pack_names=["circuits"], count=1, seed=18)[0]
 
     def response(self, text: str, error: str | None = None) -> ModelResponse:
         return ModelResponse(
@@ -55,9 +53,7 @@ class GradeTests(unittest.TestCase):
     def test_convertible_unit_passes(self) -> None:
         task = next(
             task
-            for task in generate_tasks(
-                pack_names=["communications"], count=20, seed=9
-            )
+            for task in generate_tasks(pack_names=["communications"], count=20, seed=9)
             if task.expected["unit"] == "Mbit/s"
         )
         expected = float(task.expected["value"])

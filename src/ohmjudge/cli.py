@@ -9,10 +9,12 @@ from pathlib import Path
 from typing import Any
 
 from . import __version__
+from .audit import audit_experiment
+from .compare import compare_models
 from .demo import build_demo
 from .generate import generate_tasks, suite_commitment
 from .grade import grade_responses
-from .io import read_jsonl, write_jsonl
+from .io import read_jsonl, write_json, write_jsonl
 from .lab import render_lab
 from .models import GradeRecord, ModelResponse, Task
 from .packs import PACKS
@@ -169,6 +171,38 @@ def _cmd_report(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_audit(args: argparse.Namespace) -> int:
+    tasks = _tasks(args.tasks)
+    responses = _responses(args.responses) if args.responses else None
+    grades = _grades(args.grades) if args.grades else None
+    prices = load_prices(args.pricing)
+    result = audit_experiment(
+        tasks,
+        responses=responses,
+        grades=grades,
+        prices=prices,
+        require_complete=args.require_complete,
+    )
+    if args.output:
+        write_json(args.output, result)
+    print(json.dumps(result, indent=2))
+    return 0 if result["status"] == "pass" else 1
+
+
+def _cmd_compare(args: argparse.Namespace) -> int:
+    result = compare_models(
+        _grades(args.grades),
+        baseline_provider=args.baseline_provider,
+        baseline_model=args.baseline_model,
+        challenger_provider=args.challenger_provider,
+        challenger_model=args.challenger_model,
+    )
+    if args.output:
+        write_json(args.output, result)
+    print(json.dumps(result, indent=2))
+    return 0
+
+
 def _cmd_demo(args: argparse.Namespace) -> int:
     outputs = build_demo(args.output, seed=args.seed, count=args.count)
     print(
@@ -223,7 +257,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     generate = commands.add_parser("generate", help="generate a fresh task suite")
     generate.add_argument("--pack", action="append", choices=tuple(PACKS))
-    generate.add_argument("--count", type=int, default=40)
+    generate.add_argument("--count", type=int, default=50)
     generate.add_argument("--seed", type=int, default=2026)
     generate.add_argument("--output", default="tasks.private.jsonl")
     generate.add_argument("--public-output")
@@ -271,10 +305,32 @@ def build_parser() -> argparse.ArgumentParser:
     report.add_argument("--output", default="ohmjudge-report.html")
     report.set_defaults(func=_cmd_report)
 
+    audit = commands.add_parser(
+        "audit", help="verify the integrity and coverage of experiment artifacts"
+    )
+    audit.add_argument("--tasks", required=True)
+    audit.add_argument("--responses")
+    audit.add_argument("--grades")
+    audit.add_argument("--pricing")
+    audit.add_argument("--require-complete", action="store_true")
+    audit.add_argument("--output")
+    audit.set_defaults(func=_cmd_audit)
+
+    compare = commands.add_parser(
+        "compare", help="run a paired deterministic comparison of two models"
+    )
+    compare.add_argument("--grades", required=True)
+    compare.add_argument("--baseline-provider", required=True)
+    compare.add_argument("--baseline-model", required=True)
+    compare.add_argument("--challenger-provider", required=True)
+    compare.add_argument("--challenger-model", required=True)
+    compare.add_argument("--output")
+    compare.set_defaults(func=_cmd_compare)
+
     demo = commands.add_parser("demo", help="build synthetic report and no-API lab")
     demo.add_argument("--output", default="demo")
     demo.add_argument("--seed", type=int, default=2026)
-    demo.add_argument("--count", type=int, default=40)
+    demo.add_argument("--count", type=int, default=50)
     demo.set_defaults(func=_cmd_demo)
 
     packs = commands.add_parser("list-packs", help="list task packs and templates")

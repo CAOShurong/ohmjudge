@@ -74,6 +74,12 @@ no observed model is both at least as accurate and no more expensive, with one
 strict advantage. Missing or partial costs stay missing rather than being
 treated as free.
 
+For two models evaluated on the same task IDs, `compare` reports an exact
+two-sided McNemar test over the discordant correctness pairs. This respects the
+paired design better than treating the two observed accuracies as independent.
+It does not remove dependence among tasks from the same generator template or
+correct for testing many model pairs.
+
 ## Threats to validity
 
 ### Construct validity

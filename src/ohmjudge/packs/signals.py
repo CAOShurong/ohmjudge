@@ -51,8 +51,11 @@ def nyquist_rate(rng: Random, seed: int) -> Task:
 def alias_frequency(rng: Random, seed: int) -> Task:
     sample_rate = rng.choice([8.0, 10.0, 12.0, 16.0, 20.0])
     input_frequency = rng.choice(
-        [value for value in [6.0, 7.0, 9.0, 11.0, 13.0, 15.0, 18.0, 23.0]
-         if value != sample_rate]
+        [
+            value
+            for value in [6.0, 7.0, 9.0, 11.0, 13.0, 15.0, 18.0, 23.0]
+            if value != sample_rate
+        ]
     )
     remainder = input_frequency % sample_rate
     value = min(remainder, sample_rate - remainder)

@@ -11,9 +11,7 @@ class ReplayProvider(BaseProvider):
     name = "replay"
 
     def __init__(self, path: str | Path) -> None:
-        self.responses = {
-            str(record["task_id"]): record for record in read_jsonl(path)
-        }
+        self.responses = {str(record["task_id"]): record for record in read_jsonl(path)}
 
     def request(self, *, task_id: str, prompt: str, model: str) -> ModelResponse:
         record = self.responses.get(task_id)

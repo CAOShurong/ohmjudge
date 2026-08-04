@@ -99,7 +99,9 @@ def grade_one(
             observed_unit=observed_unit,
             absolute_error=None,
             parse_mode=parsed.mode,
-            details={"expected_dimension": expected_spec.dimension if expected_spec else None},
+            details={
+                "expected_dimension": expected_spec.dimension if expected_spec else None
+            },
         )
     if expected_spec is None:
         raise ValueError(f"task {task.id} has unknown expected unit {expected_unit!r}")

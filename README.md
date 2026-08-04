@@ -4,6 +4,7 @@
   <p><strong>Fresh, executable electrical-engineering benchmarks for frontier models.</strong></p>
 
   <p>
+    <a href="https://caoshurong.github.io/ohmjudge/"><img alt="Live demo" src="https://img.shields.io/badge/live-demo-5dd6c7"></a>
     <a href="https://github.com/CAOShurong/ohmjudge/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/CAOShurong/ohmjudge/actions/workflows/ci.yml/badge.svg"></a>
     <a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/license-MIT-5dd6c7"></a>
     <img alt="zero runtime dependencies" src="https://img.shields.io/badge/runtime%20dependencies-0-9cf">
@@ -26,7 +27,7 @@ Static benchmark questions eventually leak into training data. LLM-as-a-judge sc
 - **auditable artifacts** — tasks, responses, grades, prices, and suite commitments are plain JSONL/JSON;
 - **useful diagnostics** — see domain accuracy, confidence intervals, cost, latency, error types, and the price–accuracy Pareto frontier.
 
-It currently includes 20 task templates across circuits, signals, control, and communications.
+It currently includes 50 task templates across ten EE domains.
 
 <div align="center">
   <img src="docs/assets/workflow.svg" width="900" alt="OhmJudge reproducible evaluation workflow">
@@ -41,7 +42,7 @@ python -m pip install -e .
 
 # Generate a private grading file plus a safe-to-share prompt file.
 ohmjudge generate \
-  --count 40 \
+  --count 50 \
   --seed 2026 \
   --output tasks.private.jsonl \
   --public-output prompts.public.jsonl
@@ -88,13 +89,39 @@ The report is a self-contained interactive HTML file—no server, CDN, tracker, 
 - error taxonomy;
 - latency and token summaries when available;
 - user-supplied price estimates and a log-scaled price–accuracy Pareto frontier;
-- filters and expandable per-task evidence.
+- filterable per-task evidence.
 
 Generate the bundled synthetic demo with:
 
 ```bash
 ohmjudge demo --output demo
 ```
+
+Or explore the [live project site and synthetic demo](https://caoshurong.github.io/ohmjudge/).
+
+## Audit and compare experiments
+
+```bash
+ohmjudge audit \
+  --tasks tasks.private.jsonl \
+  --responses responses.jsonl \
+  --grades grades.jsonl \
+  --require-complete \
+  --output audit.json
+
+ohmjudge compare \
+  --grades grades.jsonl \
+  --baseline-provider manual-web \
+  --baseline-model "Model A" \
+  --challenger-provider manual-web \
+  --challenger-model "Model B" \
+  --output comparison.json
+```
+
+`audit` recomputes every verdict and checks task coverage, duplicates, units,
+tolerances, and cross-file integrity. `compare` uses paired task outcomes and an
+exact two-sided McNemar test; it warns when the discordant sample is too small
+for a strong conclusion. See [Running an experiment](docs/EXPERIMENTS.md).
 
 ## What is tested
 
@@ -104,6 +131,12 @@ ohmjudge demo --output demo
 | Signals | RMS, Nyquist rate, alias frequency, sequence energy, convolution length | numeric or integer equality |
 | Control | time constant, overshoot, settling time, pole radius, DC gain | formula-grounded numeric checks |
 | Communications | Shannon capacity, free-space path loss, thermal noise, QPSK rate, link budget | logarithmic and linear-unit checks |
+| Electronics | diode bias, BJT drive, MOSFET loss, ADC resolution, slew time | device-model and mixed-unit checks |
+| Power | three-phase power, transformers, stored energy, PF correction, battery runtime | AC, energy, and efficiency checks |
+| Electromagnetics | wavelength, plane waves, wire fields, capacitance, solenoids | physical constants and geometry checks |
+| Digital | path delay, timing closure, counters, two's complement, Hamming distance | exact discrete and timing checks |
+| Embedded | UART, PWM, timers, ADC buffers, I2C | firmware-facing timing and storage checks |
+| Instrumentation | shunts, sensors, uncertainty, gain, Wheatstone bridges | measurement-chain checks |
 
 The generators target calculation discipline and unit handling. They do **not** yet cover schematic images, open-ended design, HDL, RF layout, semiconductor process design, or safety certification. See [Methodology](docs/METHODOLOGY.md) for the exact validity boundary.
 
@@ -139,7 +172,7 @@ Every generated task has:
 
 `generate` also prints a SHA-256 suite commitment. Publish the commitment and public prompts before collecting answers; release the private task file after the evaluation window if you want others to audit your result.
 
-Read the [methodology](docs/METHODOLOGY.md), [data schemas](docs/SCHEMA.md), and [competitive landscape](docs/COMPETITIVE-LANDSCAPE.md) before reporting a serious comparison.
+Read the [methodology](docs/METHODOLOGY.md), [experiment guide](docs/EXPERIMENTS.md), [data schemas](docs/SCHEMA.md), and [competitive landscape](docs/COMPETITIVE-LANDSCAPE.md) before reporting a serious comparison.
 
 ## Project map
 
@@ -147,6 +180,8 @@ Read the [methodology](docs/METHODOLOGY.md), [data schemas](docs/SCHEMA.md), and
 src/ohmjudge/
 ├── packs/          # seeded EE task generators
 ├── providers/      # optional remote runners
+├── audit.py         # cross-artifact integrity verification
+├── compare.py       # paired model comparison
 ├── generate.py     # suites and commitments
 ├── grade.py        # deterministic validator
 ├── lab.py          # no-API browser workflow
@@ -159,3 +194,5 @@ src/ohmjudge/
 The most valuable contribution is a new task pack with an independently checkable answer—not a longer prompt. Start with [Writing a pack](docs/WRITING_A_PACK.md), then read [CONTRIBUTING.md](CONTRIBUTING.md).
 
 Please cite the repository with the metadata in [CITATION.cff](CITATION.cff). OhmJudge is released under the [MIT License](LICENSE).
+
+Planned verifier and task-family work is tracked in the [roadmap](ROADMAP.md).

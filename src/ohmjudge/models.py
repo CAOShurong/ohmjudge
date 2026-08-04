@@ -30,7 +30,7 @@ class Task:
         return data
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "Task":
+    def from_dict(cls, data: dict[str, Any]) -> Task:
         return cls(
             id=str(data["id"]),
             pack=str(data["pack"]),
@@ -60,7 +60,7 @@ class ModelResponse:
         return asdict(self)
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "ModelResponse":
+    def from_dict(cls, data: dict[str, Any]) -> ModelResponse:
         return cls(
             task_id=str(data["task_id"]),
             provider=str(data["provider"]),
@@ -71,9 +71,7 @@ class ModelResponse:
                 if data.get("latency_ms") is not None
                 else None
             ),
-            usage={
-                str(k): int(v) for k, v in dict(data.get("usage", {})).items()
-            },
+            usage={str(k): int(v) for k, v in dict(data.get("usage", {})).items()},
             error=str(data["error"]) if data.get("error") else None,
             metadata=dict(data.get("metadata", {})),
         )
@@ -105,7 +103,7 @@ class GradeRecord:
         return asdict(self)
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "GradeRecord":
+    def from_dict(cls, data: dict[str, Any]) -> GradeRecord:
         return cls(
             task_id=str(data["task_id"]),
             provider=str(data["provider"]),
@@ -134,9 +132,7 @@ class GradeRecord:
                 if data.get("latency_ms") is not None
                 else None
             ),
-            usage={
-                str(k): int(v) for k, v in dict(data.get("usage", {})).items()
-            },
+            usage={str(k): int(v) for k, v in dict(data.get("usage", {})).items()},
             cost=float(data["cost"]) if data.get("cost") is not None else None,
             parse_mode=(
                 str(data["parse_mode"]) if data.get("parse_mode") is not None else None

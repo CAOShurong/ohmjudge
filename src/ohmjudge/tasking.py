@@ -6,7 +6,6 @@ from typing import Any
 
 from .models import Task
 
-
 ANSWER_INSTRUCTION = """
 Return exactly one JSON object and no surrounding prose:
 {"answer": <number>, "unit": "<unit requested in the question>"}

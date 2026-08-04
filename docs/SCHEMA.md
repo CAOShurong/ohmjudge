@@ -99,3 +99,18 @@ cost, never zero cost.
 Fields may be added in minor releases. Readers should ignore unknown fields.
 Removing or changing the meaning of an existing field requires a major release.
 Generator behavior is separately identified by `generator_version`.
+
+## Audit output
+
+`ohmjudge audit` writes one JSON object containing the suite commitment, task,
+pack, template, model, response, and grade counts; per-model coverage; a
+recomputation verdict; warnings; and integrity errors. `status` is `pass` only
+when the `errors` list is empty.
+
+## Comparison output
+
+`ohmjudge compare` writes one JSON object with the two exact provider/model
+selectors, shared-task counts, the four paired correctness cells, observed
+accuracy delta, exact two-sided McNemar p-value, per-pack breakdowns, and
+warnings. Missing task IDs are excluded from the paired calculation and produce
+a warning.

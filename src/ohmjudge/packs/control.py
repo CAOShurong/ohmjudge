@@ -27,9 +27,7 @@ def first_order_time_constant(rng: Random, seed: int) -> Task:
 
 def percent_overshoot(rng: Random, seed: int) -> Task:
     damping = rng.choice([0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8])
-    value = 100.0 * math.exp(
-        -damping * math.pi / math.sqrt(1.0 - damping * damping)
-    )
+    value = 100.0 * math.exp(-damping * math.pi / math.sqrt(1.0 - damping * damping))
     return make_task(
         pack="control",
         template="percent_overshoot",
@@ -94,9 +92,7 @@ def discrete_pole_radius(rng: Random, seed: int) -> Task:
         unit="unitless",
         difficulty="intermediate",
         parameters={
-            "poles": [
-                {"real": pole.real, "imaginary": pole.imag} for pole in poles
-            ]
+            "poles": [{"real": pole.real, "imaginary": pole.imag} for pole in poles]
         },
     )
 

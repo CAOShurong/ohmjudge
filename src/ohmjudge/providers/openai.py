@@ -6,7 +6,6 @@ from typing import Any
 from ..models import ModelResponse
 from .base import BaseProvider, Transport, post_json
 
-
 SYSTEM_PROMPT = (
     "You are being evaluated on electrical-engineering calculation tasks. "
     "Follow the requested output contract exactly. Do not use markdown fences."
@@ -80,7 +79,9 @@ class OpenAICompatibleProvider(BaseProvider):
             if not isinstance(choices, list) or not choices:
                 raise RuntimeError("response has no choices")
             first = choices[0]
-            if not isinstance(first, dict) or not isinstance(first.get("message"), dict):
+            if not isinstance(first, dict) or not isinstance(
+                first.get("message"), dict
+            ):
                 raise RuntimeError("response choice has no message")
             content = first["message"].get("content")
             if not isinstance(content, str):
@@ -150,10 +151,14 @@ class OpenAIResponsesProvider(BaseProvider):
                             chunks.append(part["text"])
             if not chunks:
                 raise RuntimeError("response has no output_text")
-            return "\n".join(chunks), _usage(data), {
-                "response_id": data.get("id"),
-                "status": data.get("status"),
-            }
+            return (
+                "\n".join(chunks),
+                _usage(data),
+                {
+                    "response_id": data.get("id"),
+                    "status": data.get("status"),
+                },
+            )
 
         return self._timed(
             operation,

@@ -17,7 +17,7 @@ def _derived_seed(master_seed: int, index: int, pack: str, template: str) -> int
 def generate_tasks(
     *,
     pack_names: Iterable[str] | None = None,
-    count: int = 40,
+    count: int = 50,
     seed: int = 2026,
 ) -> list[Task]:
     if count < 1:

@@ -6,7 +6,9 @@ from ohmjudge.models import GradeRecord
 from ohmjudge.stats import pareto_frontier, summarize, wilson_interval
 
 
-def record(model: str, correct: bool, cost: float, pack: str = "circuits") -> GradeRecord:
+def record(
+    model: str, correct: bool, cost: float, pack: str = "circuits"
+) -> GradeRecord:
     return GradeRecord(
         task_id=f"{model}-{correct}-{cost}",
         provider="fixture",
@@ -47,9 +49,19 @@ class StatsTests(unittest.TestCase):
 
     def test_pareto_removes_dominated_model(self) -> None:
         models = [
-            {"provider": "p", "model": "cheap-good", "accuracy": 0.8, "total_cost": 1.0},
+            {
+                "provider": "p",
+                "model": "cheap-good",
+                "accuracy": 0.8,
+                "total_cost": 1.0,
+            },
             {"provider": "p", "model": "bad-deal", "accuracy": 0.7, "total_cost": 2.0},
-            {"provider": "p", "model": "expensive-best", "accuracy": 0.9, "total_cost": 3.0},
+            {
+                "provider": "p",
+                "model": "expensive-best",
+                "accuracy": 0.9,
+                "total_cost": 3.0,
+            },
         ]
         names = {item["model"] for item in pareto_frontier(models)}
         self.assertEqual({"cheap-good", "expensive-best"}, names)

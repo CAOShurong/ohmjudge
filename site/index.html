@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="OhmJudge generates fresh electrical-engineering tasks and grades frontier-model answers with deterministic local code. No API required.">
+  <meta name="theme-color" content="#07181c">
+  <title>OhmJudge — executable EE benchmarks</title>
+  <style>
+    :root{--bg:#061419;--panel:#0e252b;--panel2:#14323a;--ink:#edf8f7;--muted:#94aeae;--line:#284b54;--teal:#55e0c1;--blue:#75a8ff;--amber:#ffc65c;--coral:#ff7c72;--width:1160px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 85% 0,#153944 0,transparent 30%),linear-gradient(180deg,#07181d,#061419 70%);color:var(--ink);font:15px/1.65 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    a{color:inherit}code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}.shell{width:min(var(--width),calc(100% - 40px));margin:auto}.nav{height:76px;display:flex;align-items:center;justify-content:space-between}.brand{display:flex;align-items:center;gap:11px;text-decoration:none;font-weight:850;font-size:18px}.brand b{display:grid;place-items:center;width:34px;height:34px;border-radius:11px;background:var(--teal);color:#042024;font-size:19px}.navlinks{display:flex;align-items:center;gap:24px;color:var(--muted)}.navlinks a{text-decoration:none}.navlinks a:hover{color:var(--ink)}.button{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 17px;border-radius:12px;background:var(--teal);color:#042024;text-decoration:none;font-weight:800;border:1px solid transparent}.button.secondary{background:#112b32;color:var(--ink);border-color:var(--line)}.button:hover{transform:translateY(-1px)}
+    .hero{display:grid;grid-template-columns:1.15fr .85fr;gap:54px;align-items:center;padding:78px 0 92px}.kicker{color:var(--teal);text-transform:uppercase;letter-spacing:.16em;font-size:12px;font-weight:850}.hero h1{font-size:clamp(43px,7vw,78px);letter-spacing:-.055em;line-height:.97;margin:16px 0 25px;max-width:760px}.hero h1 span{color:var(--teal)}.lede{font-size:19px;color:#abc3c2;max-width:680px}.actions{display:flex;gap:11px;flex-wrap:wrap;margin-top:30px}.micro{display:flex;gap:18px;flex-wrap:wrap;color:var(--muted);font-size:13px;margin-top:24px}.micro span:before{content:"✓";color:var(--teal);margin-right:7px;font-weight:900}
+    .scope{position:relative;min-height:440px;border:1px solid var(--line);border-radius:26px;background:linear-gradient(150deg,#12343a,#0a1e25);overflow:hidden;box-shadow:0 30px 90px #0008}.scope:before{content:"";position:absolute;inset:0;background-image:linear-gradient(#a8d5d20b 1px,transparent 1px),linear-gradient(90deg,#a8d5d20b 1px,transparent 1px);background-size:30px 30px}.wave{position:absolute;inset:62px 24px auto;width:calc(100% - 48px);height:180px}.trace{fill:none;stroke:var(--teal);stroke-width:5;filter:drop-shadow(0 0 7px #55e0c188)}.axis{stroke:#46636a;stroke-width:1}.scope-copy{position:absolute;left:29px;right:29px;bottom:27px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.scope-card{padding:14px;border:1px solid #315761;border-radius:13px;background:#081b20cc}.scope-card strong{display:block;font-size:22px}.scope-card span{color:var(--muted);font-size:12px}
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:20px;background:#0b2026;overflow:hidden}.stat{padding:24px 28px;border-right:1px solid var(--line)}.stat:last-child{border:0}.stat strong{font-size:31px;display:block}.stat span{color:var(--muted)}
+    section{padding:90px 0}.section-head{display:flex;justify-content:space-between;gap:30px;align-items:end;margin-bottom:34px}.section-head h2{font-size:clamp(30px,4.5vw,50px);line-height:1.05;letter-spacing:-.035em;margin:0;max-width:700px}.section-head p{color:var(--muted);max-width:430px;margin:0}
+    .pipeline{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.stage{position:relative;min-height:190px;padding:22px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(180deg,var(--panel2),var(--panel))}.stage:not(:last-child):after{content:"→";position:absolute;right:-19px;top:80px;color:var(--teal);font-size:20px;z-index:2}.num{color:var(--teal);font:700 12px ui-monospace,monospace}.stage h3{font-size:19px;margin:32px 0 8px}.stage p{color:var(--muted);margin:0;font-size:13px}.artifact{display:inline-block;margin-top:16px;color:var(--amber);font:11px ui-monospace,monospace}
+    .domains{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.domain{padding:20px;border:1px solid var(--line);border-radius:17px;background:#0c2228;min-height:150px}.domain i{display:grid;place-items:center;width:38px;height:38px;border-radius:11px;background:#173a40;color:var(--teal);font-style:normal;font-weight:900}.domain h3{font-size:16px;margin:17px 0 5px}.domain p{color:var(--muted);font-size:12px;margin:0}.domain:hover{border-color:#55e0c177;background:#102a30}
+    .evidence{display:grid;grid-template-columns:1fr 1fr;gap:18px}.terminal{border:1px solid var(--line);border-radius:20px;background:#051419;overflow:hidden}.terminal-top{display:flex;gap:7px;padding:13px 16px;border-bottom:1px solid #18343b}.terminal-top i{width:8px;height:8px;border-radius:50%;background:#365a61}.terminal-top i:first-child{background:var(--coral)}.terminal-top i:nth-child(2){background:var(--amber)}.terminal-top i:nth-child(3){background:var(--teal)}pre{margin:0;padding:24px;overflow:auto;color:#b9cecd;font-size:13px;line-height:1.75}.prompt-card{border:1px solid var(--line);border-radius:20px;padding:26px;background:linear-gradient(145deg,#17313a,#0d2229)}.prompt-card .label{color:var(--amber);font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:800}.prompt-card blockquote{font-size:18px;line-height:1.55;margin:18px 0;padding:0;border:0}.json{padding:13px;border-radius:11px;background:#07191e;color:var(--teal);font-family:ui-monospace,monospace}.verdict{display:flex;justify-content:space-between;align-items:center;margin-top:17px;padding-top:15px;border-top:1px solid var(--line)}.pass{color:var(--teal);font-weight:850}
+    .callout{display:grid;grid-template-columns:1fr auto;gap:30px;align-items:center;padding:42px;border:1px solid #4ecdb75c;border-radius:24px;background:linear-gradient(110deg,#123a3b,#112638)}.callout h2{font-size:32px;margin:0 0 9px}.callout p{color:#aac3c2;margin:0;max-width:680px}
+    .limitations{display:grid;grid-template-columns:1fr 1fr;gap:14px}.limit{padding:23px;border-left:3px solid var(--amber);background:#0d2228;border-radius:0 14px 14px 0}.limit strong{display:block;margin-bottom:5px}.limit span{color:var(--muted)}
+    footer{padding:45px 0 60px;border-top:1px solid #18363d;color:var(--muted);display:flex;justify-content:space-between;gap:20px}.footlinks{display:flex;gap:18px}
+    @media(max-width:900px){.hero{grid-template-columns:1fr}.scope{min-height:380px}.stats{grid-template-columns:repeat(2,1fr)}.stat:nth-child(2){border-right:0}.stat:nth-child(-n+2){border-bottom:1px solid var(--line)}.pipeline{grid-template-columns:1fr 1fr}.stage:not(:last-child):after{display:none}.domains{grid-template-columns:repeat(2,1fr)}.evidence{grid-template-columns:1fr}}
+    @media(max-width:620px){.shell{width:min(100% - 24px,var(--width))}.navlinks>a:not(.button){display:none}.hero{padding:48px 0 65px}.stats{grid-template-columns:1fr}.stat,.stat:nth-child(2){border-right:0;border-bottom:1px solid var(--line)}.pipeline,.domains,.limitations{grid-template-columns:1fr}.section-head,.callout,footer{display:block}.callout .button{margin-top:22px}.footlinks{margin-top:16px;flex-wrap:wrap}}
+  </style>
+</head>
+<body>
+  <nav class="shell nav">
+    <a class="brand" href="#"><b>Ω</b> OhmJudge</a>
+    <div class="navlinks">
+      <a href="#method">Method</a>
+      <a href="#domains">Domains</a>
+      <a href="#evidence">Evidence</a>
+      <a class="button secondary" href="https://github.com/CAOShurong/ohmjudge">View source ↗</a>
+    </div>
+  </nav>
+
+  <main>
+    <header class="shell hero">
+      <div>
+        <div class="kicker">Executable electrical-engineering evaluation</div>
+        <h1>Fresh problems.<br><span>Local verdicts.</span></h1>
+        <p class="lede">Generate a new EE benchmark, copy each prompt into any frontier model's web app, and grade every answer with deterministic Python—not another language model.</p>
+        <div class="actions">
+          <a class="button" href="demo/no-api-lab.html">Open the no-API lab →</a>
+          <a class="button secondary" href="demo/report.html">Explore a synthetic report</a>
+        </div>
+        <div class="micro"><span>No API required</span><span>Zero runtime dependencies</span><span>MIT licensed</span></div>
+      </div>
+      <div class="scope" aria-label="Stylized benchmark signal display">
+        <svg class="wave" viewBox="0 0 500 180" role="img" aria-label="An electrical waveform becoming a checked digital result">
+          <path class="axis" d="M0 90H500M125 0V180M250 0V180M375 0V180"/>
+          <path class="trace" d="M0 90C18 18 42 18 62 90s44 72 63 0 44-72 63 0 44 72 62 0h32l12-28 18 56 19-74 22 46h40l15-18 18 18h73"/>
+          <circle cx="500" cy="90" r="8" fill="#55e0c1"/>
+        </svg>
+        <div class="scope-copy">
+          <div class="scope-card"><strong>50</strong><span>procedural templates</span></div>
+          <div class="scope-card"><strong>10</strong><span>EE domains</span></div>
+          <div class="scope-card"><strong>SHA-256</strong><span>suite commitment</span></div>
+          <div class="scope-card"><strong>JSONL</strong><span>portable evidence</span></div>
+        </div>
+      </div>
+    </header>
+
+    <div class="shell stats">
+      <div class="stat"><strong>0</strong><span>runtime dependencies</span></div>
+      <div class="stat"><strong>50</strong><span>fresh task families</span></div>
+      <div class="stat"><strong>95%</strong><span>Wilson intervals</span></div>
+      <div class="stat"><strong>1 file</strong><span>standalone lab or report</span></div>
+    </div>
+
+    <section id="method" class="shell">
+      <div class="section-head">
+        <h2>An evaluation chain you can inspect end to end.</h2>
+        <p>Each stage produces a plain artifact. Publish the evidence, rerun the grader, and check the same result without trusting a dashboard.</p>
+      </div>
+      <div class="pipeline">
+        <article class="stage"><span class="num">01 / GENERATE</span><h3>Fresh suite</h3><p>Seeded generators vary physical parameters while preserving the governing equations.</p><span class="artifact">tasks.private.jsonl</span></article>
+        <article class="stage"><span class="num">02 / COMMIT</span><h3>Freeze intent</h3><p>A SHA-256 commitment records the exact private suite before answers are collected.</p><span class="artifact">prompts.public.jsonl</span></article>
+        <article class="stage"><span class="num">03 / COLLECT</span><h3>Any model</h3><p>Use ordinary web chat, an optional API adapter, or replay an existing response set.</p><span class="artifact">responses.jsonl</span></article>
+        <article class="stage"><span class="num">04 / VERIFY</span><h3>Local grader</h3><p>Normalize units, apply declared tolerances, and classify concrete failure modes.</p><span class="artifact">grades.jsonl</span></article>
+        <article class="stage"><span class="num">05 / AUDIT</span><h3>Publish evidence</h3><p>Recompute every verdict, inspect coverage, and compare models on paired tasks.</p><span class="artifact">audit.json</span></article>
+      </div>
+    </section>
+
+    <section id="domains" class="shell">
+      <div class="section-head">
+        <h2>Ten domains, not one disguised formula.</h2>
+        <p>Every domain contains five independently named templates. The current release emphasizes auditable numerical reasoning and unit discipline.</p>
+      </div>
+      <div class="domains">
+        <article class="domain"><i>V</i><h3>Circuits</h3><p>Dividers, filters, op-amps, Thevenin models, series networks.</p></article>
+        <article class="domain"><i>∿</i><h3>Signals</h3><p>RMS, sampling, aliases, energy, convolution.</p></article>
+        <article class="domain"><i>ζ</i><h3>Control</h3><p>Poles, overshoot, settling, stability, gain.</p></article>
+        <article class="domain"><i>RF</i><h3>Communications</h3><p>Capacity, path loss, noise, symbols, link budgets.</p></article>
+        <article class="domain"><i>Q</i><h3>Electronics</h3><p>Diodes, BJTs, MOSFETs, ADCs, slew rate.</p></article>
+        <article class="domain"><i>3φ</i><h3>Power</h3><p>Three-phase loads, transformers, energy, PF, batteries.</p></article>
+        <article class="domain"><i>λ</i><h3>Electromagnetics</h3><p>Waves, fields, capacitance, magnetic flux, inductance.</p></article>
+        <article class="domain"><i>01</i><h3>Digital</h3><p>Timing, clock limits, counters, encodings, distance.</p></article>
+        <article class="domain"><i>µC</i><h3>Embedded</h3><p>UART, PWM, timers, buffers, I2C transfers.</p></article>
+        <article class="domain"><i>Δ</i><h3>Instrumentation</h3><p>Shunts, sensors, uncertainty, dB, bridge outputs.</p></article>
+      </div>
+    </section>
+
+    <section id="evidence" class="shell">
+      <div class="section-head">
+        <h2>No hidden judge. No mandatory cloud.</h2>
+        <p>The answer contract is deliberately small. Mathematical correctness and format compliance remain separately inspectable.</p>
+      </div>
+      <div class="evidence">
+        <div class="terminal">
+          <div class="terminal-top"><i></i><i></i><i></i></div>
+          <pre><span style="color:#55e0c1">$</span> pip install -e .
+
+<span style="color:#55e0c1">$</span> ohmjudge generate --count 50 --seed 2026 \
+    --output tasks.private.jsonl \
+    --public-output prompts.public.jsonl
+
+{
+  "tasks": 50,
+  "packs": ["circuits", "…", "instrumentation"],
+  "commitment": "sha256:…"
+}
+
+<span style="color:#55e0c1">$</span> ohmjudge lab \
+    --tasks tasks.private.jsonl \
+    --output lab.html</pre>
+        </div>
+        <div class="prompt-card">
+          <div class="label">Example task contract</div>
+          <blockquote>A balanced three-phase load draws 25 A from a 400 V line-to-line supply at power factor 0.9. What is the total real power in kW?</blockquote>
+          <div class="json">{"answer": 15.5885, "unit": "kW"}</div>
+          <div class="verdict"><span>Unit-normalized error within tolerance</span><span class="pass">✓ PASS</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="shell">
+      <div class="callout">
+        <div><h2>Run the complete workflow in your browser.</h2><p>The public demo uses fictional models and synthetic answers. It demonstrates the interface and evidence pipeline; it does not claim a real leaderboard result.</p></div>
+        <a class="button" href="demo/no-api-lab.html">Launch the lab →</a>
+      </div>
+    </section>
+
+    <section class="shell">
+      <div class="section-head">
+        <h2>Clear boundaries are part of the benchmark.</h2>
+        <p>A score is meaningful only inside the construct actually tested.</p>
+      </div>
+      <div class="limitations">
+        <div class="limit"><strong>Not professional certification.</strong><span>Scalar calculation performance does not establish safe hardware-design competence.</span></div>
+        <div class="limit"><strong>Not contamination-proof.</strong><span>Fresh parameters reduce exact memorization, but formulas and template families can remain familiar.</span></div>
+        <div class="limit"><strong>Not an official model ranking.</strong><span>Web products, API model IDs, routing, tools, and dates must be reported separately.</span></div>
+        <div class="limit"><strong>Not a replacement for simulation.</strong><span>SPICE, HDL, EDA, laboratory measurement, and safety validation remain future task classes.</span></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="shell">
+    <span>OhmJudge · MIT License · Built for auditable EE model evaluation.</span>
+    <div class="footlinks"><a href="https://github.com/CAOShurong/ohmjudge">GitHub</a><a href="https://github.com/CAOShurong/ohmjudge/blob/main/docs/METHODOLOGY.md">Methodology</a><a href="https://github.com/CAOShurong/ohmjudge/blob/main/CONTRIBUTING.md">Contribute</a></div>
+  </footer>
+</body>
+</html>

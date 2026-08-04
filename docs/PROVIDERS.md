@@ -3,7 +3,7 @@
 You do not need an API to use OhmJudge. The recommended starting point is:
 
 ```bash
-ohmjudge generate --count 40 --seed 2026 --output tasks.private.jsonl
+ohmjudge generate --count 50 --seed 2026 --output tasks.private.jsonl
 ohmjudge lab --tasks tasks.private.jsonl --output ohmjudge-lab.html
 ```
 

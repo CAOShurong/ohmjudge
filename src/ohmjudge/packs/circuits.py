@@ -31,9 +31,7 @@ def voltage_divider(rng: Random, seed: int) -> Task:
 def rc_cutoff(rng: Random, seed: int) -> Task:
     resistance_kohm = rng.choice([1.0, 2.2, 4.7, 10.0, 22.0, 47.0])
     capacitance_nf = rng.choice([1.0, 2.2, 4.7, 10.0, 22.0, 47.0, 100.0])
-    value = 1.0 / (
-        2.0 * math.pi * resistance_kohm * 1e3 * capacitance_nf * 1e-9
-    )
+    value = 1.0 / (2.0 * math.pi * resistance_kohm * 1e3 * capacitance_nf * 1e-9)
     return make_task(
         pack="circuits",
         template="rc_cutoff",

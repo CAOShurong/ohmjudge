@@ -31,11 +31,7 @@ def shannon_capacity(rng: Random, seed: int) -> Task:
 def free_space_path_loss(rng: Random, seed: int) -> Task:
     distance_km = rng.choice([0.1, 0.5, 1.0, 2.0, 5.0, 10.0, 20.0])
     frequency_mhz = rng.choice([433.0, 868.0, 915.0, 1800.0, 2400.0, 5800.0])
-    value = (
-        32.44
-        + 20.0 * math.log10(distance_km)
-        + 20.0 * math.log10(frequency_mhz)
-    )
+    value = 32.44 + 20.0 * math.log10(distance_km) + 20.0 * math.log10(frequency_mhz)
     return make_task(
         pack="communications",
         template="free_space_path_loss",

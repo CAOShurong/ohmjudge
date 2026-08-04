@@ -8,8 +8,8 @@ from ohmjudge.packs import PACKS
 
 class GenerateTests(unittest.TestCase):
     def test_same_seed_is_byte_stable(self) -> None:
-        first = generate_tasks(count=40, seed=99)
-        second = generate_tasks(count=40, seed=99)
+        first = generate_tasks(count=50, seed=99)
+        second = generate_tasks(count=50, seed=99)
         self.assertEqual(
             [task.to_dict() for task in first],
             [task.to_dict() for task in second],
@@ -22,7 +22,8 @@ class GenerateTests(unittest.TestCase):
         self.assertNotEqual(suite_commitment(first), suite_commitment(second))
 
     def test_all_templates_are_reached(self) -> None:
-        tasks = generate_tasks(count=40, seed=7)
+        template_count = sum(len(generators) for generators in PACKS.values())
+        tasks = generate_tasks(count=template_count, seed=7)
         reached = {(task.pack, task.template) for task in tasks}
         expected = {
             (pack, generator.__name__)

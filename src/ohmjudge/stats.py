@@ -9,7 +9,9 @@ from typing import Any
 from .models import GradeRecord
 
 
-def wilson_interval(successes: int, total: int, z: float = 1.959964) -> tuple[float, float]:
+def wilson_interval(
+    successes: int, total: int, z: float = 1.959964
+) -> tuple[float, float]:
     if total <= 0:
         return (0.0, 0.0)
     proportion = successes / total
@@ -18,8 +20,7 @@ def wilson_interval(successes: int, total: int, z: float = 1.959964) -> tuple[fl
     margin = (
         z
         * math.sqrt(
-            proportion * (1.0 - proportion) / total
-            + z * z / (4.0 * total * total)
+            proportion * (1.0 - proportion) / total + z * z / (4.0 * total * total)
         )
         / denominator
     )
@@ -57,9 +58,7 @@ def _aggregate(records: list[GradeRecord]) -> dict[str, Any]:
         "total_cost": total_cost,
         "cost_complete": complete_cost,
         "cost_per_correct": (
-            total_cost / correct
-            if total_cost is not None and correct
-            else None
+            total_cost / correct if total_cost is not None and correct else None
         ),
         "input_tokens": input_tokens,
         "output_tokens": output_tokens,
@@ -94,11 +93,7 @@ def summarize(records: Iterable[GradeRecord]) -> dict[str, Any]:
 
 
 def pareto_frontier(models: list[dict[str, Any]]) -> list[dict[str, str]]:
-    eligible = [
-        model
-        for model in models
-        if model.get("total_cost") is not None
-    ]
+    eligible = [model for model in models if model.get("total_cost") is not None]
     frontier: list[dict[str, str]] = []
     for candidate in eligible:
         dominated = any(

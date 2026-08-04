@@ -1,0 +1,52 @@
+{
+  "coverage": [
+    {
+      "answered": 50,
+      "complete": true,
+      "expected": 50,
+      "missing_task_ids": [],
+      "model": "CopperFox-4",
+      "provider": "synthetic"
+    },
+    {
+      "answered": 50,
+      "complete": true,
+      "expected": 50,
+      "missing_task_ids": [],
+      "model": "NanoRelay-1",
+      "provider": "synthetic"
+    },
+    {
+      "answered": 50,
+      "complete": true,
+      "expected": 50,
+      "missing_task_ids": [],
+      "model": "SiliconMist-2",
+      "provider": "synthetic"
+    }
+  ],
+  "errors": [],
+  "grades": 150,
+  "grades_match_recomputation": true,
+  "models": 3,
+  "pack_count": 10,
+  "packs": [
+    "circuits",
+    "communications",
+    "control",
+    "digital",
+    "electromagnetics",
+    "electronics",
+    "embedded",
+    "instrumentation",
+    "power",
+    "signals"
+  ],
+  "request_errors": 0,
+  "responses": 150,
+  "status": "pass",
+  "suite_commitment": "sha256:400a6a264f39f6d2b50482d52a3720ed7209e4542c26fbc7cbe60134a4176291",
+  "tasks": 50,
+  "template_count": 50,
+  "warnings": []
+}

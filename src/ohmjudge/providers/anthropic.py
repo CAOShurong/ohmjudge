@@ -60,16 +60,24 @@ class AnthropicProvider(BaseProvider):
             if not text_parts:
                 raise RuntimeError("response has no text content")
             raw_usage = data.get("usage", {})
-            usage = {
-                key: int(raw_usage.get(key, 0))
-                for key in ("input_tokens", "output_tokens")
-                if isinstance(raw_usage.get(key), (int, float))
-            } if isinstance(raw_usage, dict) else {}
+            usage = (
+                {
+                    key: int(raw_usage.get(key, 0))
+                    for key in ("input_tokens", "output_tokens")
+                    if isinstance(raw_usage.get(key), (int, float))
+                }
+                if isinstance(raw_usage, dict)
+                else {}
+            )
             usage["total_tokens"] = sum(usage.values())
-            return "\n".join(text_parts), usage, {
-                "response_id": data.get("id"),
-                "stop_reason": data.get("stop_reason"),
-            }
+            return (
+                "\n".join(text_parts),
+                usage,
+                {
+                    "response_id": data.get("id"),
+                    "stop_reason": data.get("stop_reason"),
+                },
+            )
 
         return self._timed(
             operation,

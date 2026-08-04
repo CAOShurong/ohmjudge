@@ -24,13 +24,10 @@ def run_tasks(
             response = ModelResponse.from_dict(record)
             if response.model != model:
                 raise ValueError(
-                    "resume file contains model "
-                    f"{response.model!r}, expected {model!r}"
+                    f"resume file contains model {response.model!r}, expected {model!r}"
                 )
             if response.task_id in completed:
-                raise ValueError(
-                    f"resume file repeats task {response.task_id}"
-                )
+                raise ValueError(f"resume file repeats task {response.task_id}")
             completed[response.task_id] = response
     pending = [task for task in tasks if task.id not in completed]
 

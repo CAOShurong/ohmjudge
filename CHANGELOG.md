@@ -10,12 +10,14 @@ All notable changes are documented here. The format follows
 
 ### Added
 
-- Twenty seeded task templates across circuits, signals, control, and communications.
+- Fifty seeded task templates across ten electrical-engineering domains.
 - Deterministic grading with unit conversion, tolerances, and error taxonomy.
 - A self-contained no-API copy/paste evaluation lab.
 - Optional OpenAI Responses, OpenAI-compatible, Anthropic, and replay providers.
 - Resume-safe response collection.
 - Interactive standalone reports with confidence intervals and a price–accuracy Pareto frontier.
+- Cross-artifact integrity audits and exact paired McNemar comparisons.
+- A responsive project site with a generated no-API lab and synthetic report.
 - Synthetic demo artifacts, schemas, methodology, and contribution guides.
 
 [Unreleased]: https://github.com/CAOShurong/ohmjudge/compare/v0.1.0...HEAD

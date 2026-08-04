@@ -8,6 +8,7 @@ __pycache__/
 venv/
 build/
 dist/
+site/demo/
 tasks.private.jsonl
 !demo/tasks.private.jsonl
 responses.jsonl
