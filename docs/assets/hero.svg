@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="440" viewBox="0 0 1200 440" role="img" aria-labelledby="title desc">
+  <title id="title">OhmJudge</title>
+  <desc id="desc">A circuit-inspired project banner showing fresh executable EE benchmarks flowing into deterministic verdicts.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#07151c"/>
+      <stop offset="0.54" stop-color="#0c2530"/>
+      <stop offset="1" stop-color="#142033"/>
+    </linearGradient>
+    <linearGradient id="trace" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#5dd6c7"/>
+      <stop offset="1" stop-color="#79a7ff"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <pattern id="grid" width="36" height="36" patternUnits="userSpaceOnUse">
+      <path d="M36 0H0V36" fill="none" stroke="#b9e4e0" stroke-opacity=".055"/>
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="440" rx="28" fill="url(#bg)"/>
+  <rect width="1200" height="440" rx="28" fill="url(#grid)"/>
+
+  <g fill="none" stroke="#5dd6c7" stroke-opacity=".23" stroke-width="2">
+    <path d="M0 90h112l28 28h94"/>
+    <path d="M0 352h155l33-33h70"/>
+    <path d="M952 66h84l25 25h139"/>
+    <path d="M930 373h72l33-33h165"/>
+  </g>
+  <g fill="#5dd6c7" opacity=".62">
+    <circle cx="112" cy="90" r="4"/><circle cx="234" cy="118" r="4"/>
+    <circle cx="155" cy="352" r="4"/><circle cx="1036" cy="66" r="4"/>
+    <circle cx="1002" cy="373" r="4"/>
+  </g>
+
+  <g transform="translate(72 78)">
+    <rect width="132" height="132" rx="30" fill="#102e36" stroke="#5dd6c7" stroke-width="2"/>
+    <circle cx="66" cy="66" r="43" fill="none" stroke="#5dd6c7" stroke-width="5" opacity=".85"/>
+    <path d="M27 67h16l8-17 15 34 14-34 9 17h17" fill="none" stroke="url(#trace)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)"/>
+    <circle cx="27" cy="67" r="5" fill="#79a7ff"/>
+    <circle cx="106" cy="67" r="5" fill="#79a7ff"/>
+  </g>
+
+  <text x="238" y="135" fill="#f3fbfa" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="74" font-weight="760" letter-spacing="-2">OhmJudge</text>
+  <text x="241" y="183" fill="#9fc5c3" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="23" font-weight="500">Fresh, executable EE benchmarks for frontier models.</text>
+
+  <g transform="translate(241 229)" font-family="Inter,Segoe UI,Arial,sans-serif">
+    <g>
+      <rect width="202" height="54" rx="15" fill="#112f37" stroke="#285963"/>
+      <circle cx="27" cy="27" r="8" fill="#5dd6c7"/>
+      <text x="46" y="34" fill="#dbf6f2" font-size="18" font-weight="620">NO API REQUIRED</text>
+    </g>
+    <g transform="translate(218)">
+      <rect width="238" height="54" rx="15" fill="#172b42" stroke="#355779"/>
+      <path d="M25 34l7-7-7-7m14 14l7-7-7-7" fill="none" stroke="#79a7ff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="60" y="34" fill="#e0ebff" font-size="18" font-weight="620">DETERMINISTIC GRADING</text>
+    </g>
+    <g transform="translate(472)">
+      <rect width="193" height="54" rx="15" fill="#302b25" stroke="#6a5a41"/>
+      <path d="M23 32h23m-18-7 7-7 7 7" fill="none" stroke="#f5bd65" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="58" y="34" fill="#fff0d6" font-size="18" font-weight="620">AUDITABLE JSONL</text>
+    </g>
+  </g>
+
+  <g transform="translate(944 163)">
+    <circle cx="71" cy="71" r="70" fill="#0b2029" stroke="#244651"/>
+    <circle cx="71" cy="71" r="52" fill="none" stroke="#203c47" stroke-width="12"/>
+    <path d="M71 19a52 52 0 0 1 48 72" fill="none" stroke="url(#trace)" stroke-width="12" stroke-linecap="round"/>
+    <path d="M48 70l17 17 31-34" fill="none" stroke="#f3fbfa" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)"/>
+    <text x="71" y="170" text-anchor="middle" fill="#8db3b2" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="15" font-weight="650" letter-spacing="2">MEASURE • VERIFY</text>
+  </g>
+
+  <g transform="translate(240 338)" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="15">
+    <text fill="#5dd6c7">$</text>
+    <text x="18" fill="#b7cecf">ohmjudge generate --count 40 --seed 2026</text>
+    <rect x="-12" y="-24" width="526" height="38" rx="9" fill="none" stroke="#31515b"/>
+  </g>
+</svg>

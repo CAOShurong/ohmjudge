@@ -1,0 +1,32 @@
+{
+  "models": [
+    {
+      "currency": "USD",
+      "input_per_million": 5.0,
+      "model": "CopperFox-4",
+      "output_per_million": 20.0,
+      "provider": "synthetic",
+      "source": "synthetic-demo",
+      "verified_at": "not-applicable"
+    },
+    {
+      "currency": "USD",
+      "input_per_million": 1.0,
+      "model": "SiliconMist-2",
+      "output_per_million": 4.0,
+      "provider": "synthetic",
+      "source": "synthetic-demo",
+      "verified_at": "not-applicable"
+    },
+    {
+      "currency": "USD",
+      "input_per_million": 0.2,
+      "model": "NanoRelay-1",
+      "output_per_million": 0.8,
+      "provider": "synthetic",
+      "source": "synthetic-demo",
+      "verified_at": "not-applicable"
+    }
+  ],
+  "notice": "Fictional prices for UI demonstration only."
+}

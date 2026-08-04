@@ -1,0 +1,49 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ohmjudge"
+version = "0.1.0"
+description = "Fresh, executable electrical-engineering benchmarks for frontier language models."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Shurong Cao" }]
+keywords = [
+  "llm",
+  "benchmark",
+  "electrical-engineering",
+  "evaluation",
+  "reproducibility",
+]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Environment :: Console",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Scientific/Engineering",
+  "Topic :: Software Development :: Testing",
+]
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/CAOShurong/ohmjudge"
+Issues = "https://github.com/CAOShurong/ohmjudge/issues"
+
+[project.scripts]
+ohmjudge = "ohmjudge.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.coverage.run]
+branch = true
+source = ["ohmjudge"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true

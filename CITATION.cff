@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use OhmJudge in a study, please cite this software."
+title: "OhmJudge: Fresh, executable electrical-engineering benchmarks for frontier models"
+type: software
+authors:
+  - family-names: Cao
+    given-names: Shurong
+repository-code: "https://github.com/CAOShurong/ohmjudge"
+url: "https://github.com/CAOShurong/ohmjudge"
+license: MIT
+version: 0.1.0
+date-released: 2026-08-04
+keywords:
+  - large language models
+  - electrical engineering
+  - benchmark
+  - evaluation
+  - reproducibility

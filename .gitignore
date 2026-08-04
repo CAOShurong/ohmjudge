@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.coverage
+.pytest_cache/
+.ruff_cache/
+.venv/
+venv/
+build/
+dist/
+tasks.private.jsonl
+!demo/tasks.private.jsonl
+responses.jsonl
+grades.jsonl
+ohmjudge-lab.html
+ohmjudge-report.html
+.env

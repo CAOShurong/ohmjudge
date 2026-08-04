@@ -1,0 +1,33 @@
+name: New task pack proposal
+description: Propose an independently verifiable EE task family.
+title: "[Pack]: "
+labels: ["task-pack"]
+body:
+  - type: input
+    id: domain
+    attributes:
+      label: EE domain
+      placeholder: "power electronics, electromagnetics, HDL…"
+    validations:
+      required: true
+  - type: textarea
+    id: gap
+    attributes:
+      label: Measurement gap
+      description: What model capability or failure would this expose?
+    validations:
+      required: true
+  - type: textarea
+    id: verifier
+    attributes:
+      label: Executable verifier
+      description: Explain how the expected result can be computed without another language model.
+    validations:
+      required: true
+  - type: textarea
+    id: ambiguity
+    attributes:
+      label: Ambiguity and validity risks
+      description: List conventions, degenerate cases, and what the task would not prove.
+    validations:
+      required: true

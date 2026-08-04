@@ -1,0 +1,14 @@
+{
+  "notice": "Replace every placeholder with a current official source.",
+  "models": [
+    {
+      "provider": "provider",
+      "model": "model-id",
+      "currency": "USD",
+      "source": "provider pricing page URL",
+      "verified_at": "YYYY-MM-DD",
+      "input_per_million": 0.0,
+      "output_per_million": 0.0
+    }
+  ]
+}
