@@ -1,25 +1,28 @@
 <div align="center">
-  <img src="docs/assets/hero.svg" width="920" alt="OhmJudge — fresh, executable electrical-engineering benchmarks for frontier models">
-
-  <p><strong>Fresh, executable electrical-engineering benchmarks for frontier models.</strong></p>
-
-  <p>
-    <a href="https://caoshurong.github.io/ohmjudge/"><img alt="Live demo" src="https://img.shields.io/badge/live-demo-5dd6c7"></a>
-    <a href="https://github.com/CAOShurong/ohmjudge/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/CAOShurong/ohmjudge/actions/workflows/ci.yml/badge.svg"></a>
-    <a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/license-MIT-5dd6c7"></a>
-    <img alt="zero runtime dependencies" src="https://img.shields.io/badge/runtime%20dependencies-0-9cf">
-    <img alt="Python 3.11+" src="https://img.shields.io/badge/python-3.11%2B-3776ab">
-  </p>
+  <img src="docs/assets/hero.svg" width="960" alt="OhmJudge graphical abstract: fresh EE tasks, local measurement, and an auditable verdict">
 </div>
 
-OhmJudge generates fresh numerical electrical-engineering problems, gives the same prompts to any model, and grades the answers locally with executable rules. Its default workflow needs **no API key**: copy a prompt into ChatGPT, Claude, Kimi, GLM, Qwen, or another web app, paste the answer back, and export a reproducible result.
+OhmJudge generates fresh numerical electrical-engineering problems, gives the
+same committed prompts to any model, and grades answers locally with executable
+rules. Its default workflow needs **no API key**: copy a prompt into a model's
+ordinary web interface, paste the answer back, and export the evidence.
+
+[Live no-API lab](https://caoshurong.github.io/ohmjudge/demo/no-api-lab.html)
+· [Synthetic report](https://caoshurong.github.io/ohmjudge/demo/report.html)
+· [Methodology](docs/METHODOLOGY.md)
+· [CI](https://github.com/CAOShurong/ohmjudge/actions/workflows/ci.yml)
+· Python 3.11+ · MIT · zero runtime dependencies
 
 > [!IMPORTANT]
 > OhmJudge is an early research tool, not an authoritative model ranking. The included dashboard uses **clearly labelled synthetic responses** to demonstrate the reporting pipeline. It makes no claim about the named commercial models.
 
 ## Why this exists
 
-Static benchmark questions eventually leak into training data. LLM-as-a-judge scores can also change when the judge model or prompt changes. OhmJudge takes a narrower route:
+Static benchmark questions can enter training data. LLM-as-a-judge scores can
+also change when the judge model or judging prompt changes. OhmJudge addresses
+a narrower, practical question: **can an individual researcher run a fresh,
+same-suite EE calculation study without buying API access or trusting a hidden
+judge?**
 
 - **fresh tasks** — deterministic generators create a new suite from a recorded seed;
 - **executable grading** — numeric answers, units, tolerances, and error categories are checked in Python;
@@ -33,12 +36,37 @@ It currently includes 50 task templates across ten EE domains.
   <img src="docs/assets/workflow.svg" width="900" alt="OhmJudge reproducible evaluation workflow">
 </div>
 
-## Try it in two minutes — no API required
+## Install
+
+Install the signed-off v0.2.0 wheel directly from the GitHub Release:
+
+```bash
+python -m pip install "https://github.com/CAOShurong/ohmjudge/releases/download/v0.2.0/ohmjudge-0.2.0-py3-none-any.whl"
+ohmjudge doctor
+```
+
+Or install the exact tag from source:
+
+```bash
+python -m pip install "git+https://github.com/CAOShurong/ohmjudge.git@v0.2.0"
+```
+
+> [!NOTE]
+> The package is not currently published on PyPI, so `pip install ohmjudge`
+> alone is not advertised. Release wheels, source archives, and SHA-256
+> checksums are attached to each GitHub Release.
+
+For development:
 
 ```bash
 git clone https://github.com/CAOShurong/ohmjudge.git
 cd ohmjudge
 python -m pip install -e .
+```
+
+## Run a no-API experiment
+
+```bash
 
 # Generate a private grading file plus a safe-to-share prompt file.
 ohmjudge generate \
@@ -53,7 +81,7 @@ ohmjudge lab --tasks tasks.private.jsonl --output ohmjudge-lab.html
 
 In the lab:
 
-1. enter a model label;
+1. record the web product, visible model label, date, settings, tools, and retry policy;
 2. copy the current prompt into the model's normal web chat;
 3. paste its answer back;
 4. grade locally and export `responses.jsonl`.
@@ -107,6 +135,7 @@ ohmjudge audit \
   --responses responses.jsonl \
   --grades grades.jsonl \
   --require-complete \
+  --require-protocol \
   --output audit.json
 
 ohmjudge compare \
@@ -118,10 +147,11 @@ ohmjudge compare \
   --output comparison.json
 ```
 
-`audit` recomputes every verdict and checks task coverage, duplicates, units,
-tolerances, and cross-file integrity. `compare` uses paired task outcomes and an
-exact two-sided McNemar test; it warns when the discordant sample is too small
-for a strong conclusion. See [Running an experiment](docs/EXPERIMENTS.md).
+`audit` recomputes every verdict and checks task coverage, capture-protocol
+metadata, duplicates, units, tolerances, and cross-file integrity. `compare`
+uses paired task outcomes and an exact two-sided McNemar test; it warns when the
+discordant sample is too small for a strong conclusion. See
+[Running an experiment](docs/EXPERIMENTS.md).
 
 ## What is tested
 

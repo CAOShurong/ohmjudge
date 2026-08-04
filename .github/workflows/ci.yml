@@ -3,6 +3,7 @@ name: CI
 on:
   push:
     branches: [main]
+    tags: ["v*"]
   pull_request:
   workflow_dispatch:
 
@@ -18,8 +19,8 @@ jobs:
         python: ["3.11", "3.13"]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python }}
       - name: Install
@@ -32,3 +33,26 @@ jobs:
           ohmjudge generate --count 50 --seed 2026 --output tasks.private.jsonl --public-output prompts.public.jsonl
           ohmjudge lab --tasks tasks.private.jsonl --output ohmjudge-lab.html
           ohmjudge demo --count 50 --seed 2026 --output build/demo
+
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+      - name: Build and inspect distributions
+        run: |
+          python -m pip install --upgrade build twine
+          python -m build
+          python -m twine check dist/*
+      - name: Clean-wheel installation smoke test
+        run: |
+          python -m venv clean-install
+          clean-install/bin/python -m pip install dist/*.whl
+          clean-install/bin/ohmjudge doctor
+          clean-install/bin/ohmjudge generate --count 10 --seed 2026 --output /tmp/tasks.jsonl
+      - uses: actions/upload-artifact@v7
+        with:
+          name: ohmjudge-distributions
+          path: dist/

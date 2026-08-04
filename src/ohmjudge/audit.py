@@ -27,6 +27,7 @@ def audit_experiment(
     grades: list[GradeRecord] | None = None,
     prices: dict[tuple[str, str], Price] | None = None,
     require_complete: bool = False,
+    require_protocol: bool = False,
 ) -> dict[str, Any]:
     errors: list[str] = []
     warnings: list[str] = []
@@ -57,6 +58,17 @@ def audit_experiment(
     response_rows = responses or []
     response_keys: set[tuple[str, str, str]] = set()
     response_models: dict[tuple[str, str], set[str]] = defaultdict(set)
+    protocol_fields = (
+        "captured_at",
+        "surface",
+        "settings",
+        "tools",
+        "retry_policy",
+    )
+    protocol_missing: dict[tuple[str, str], dict[str, int]] = defaultdict(
+        lambda: defaultdict(int)
+    )
+    protocol_complete = 0
     request_errors = 0
     for response in response_rows:
         key = _response_key(response)
@@ -69,6 +81,16 @@ def audit_experiment(
         if response.task_id not in task_ids:
             errors.append(f"response references unknown task: {response.task_id}")
         response_models[(response.provider, response.model)].add(response.task_id)
+        missing_fields = [
+            field
+            for field in protocol_fields
+            if response.metadata.get(field) in (None, "")
+        ]
+        if missing_fields:
+            for field in missing_fields:
+                protocol_missing[(response.provider, response.model)][field] += 1
+        else:
+            protocol_complete += 1
         request_errors += response.error is not None
 
     coverage: list[dict[str, Any]] = []
@@ -89,6 +111,21 @@ def audit_experiment(
                 f"{provider}/{model}: missing {len(missing)} of {len(tasks)} responses"
             )
             (errors if require_complete else warnings).append(message)
+
+    protocol_coverage: list[dict[str, Any]] = []
+    for (provider, model), missing in sorted(protocol_missing.items()):
+        row = {
+            "provider": provider,
+            "model": model,
+            "responses": len(response_models[(provider, model)]),
+            "missing": dict(sorted(missing.items())),
+        }
+        protocol_coverage.append(row)
+        missing_summary = ", ".join(
+            f"{field} ({count})" for field, count in sorted(missing.items())
+        )
+        message = f"{provider}/{model}: incomplete capture protocol: {missing_summary}"
+        (errors if require_protocol else warnings).append(message)
 
     supplied_grade_rows = grades or []
     grade_match: bool | None = None
@@ -136,6 +173,9 @@ def audit_experiment(
         "models": len(response_models),
         "request_errors": request_errors,
         "coverage": coverage,
+        "protocol_fields": list(protocol_fields),
+        "responses_with_complete_protocol": protocol_complete,
+        "protocol_coverage": protocol_coverage,
         "grades": len(supplied_grade_rows),
         "grades_match_recomputation": grade_match,
         "errors": errors,

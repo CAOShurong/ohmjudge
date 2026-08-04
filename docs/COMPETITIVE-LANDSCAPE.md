@@ -10,13 +10,14 @@ grading, a no-API browser workflow, and portable evidence artifacts.
 |---|---|---|---|
 | [EEE-Bench](https://arxiv.org/abs/2411.01492) | 2,860 multimodal questions across ten electrical and electronic engineering disciplines | curated benchmark answers | reproducible seeded scalar tasks and a local copy/paste workflow |
 | [CIRCUIT](https://arxiv.org/abs/2502.07980) | 510 analog-circuit reasoning questions | final-answer and unit-test evaluation | user-generated fresh suites, unit normalization, and auditable JSONL artifacts |
+| [PCB-Bench](https://github.com/digailab/PCB-Bench) | multimodal PCB placement and routing over real design artifacts | artifact and design-rule evaluation | a lightweight scalar-calculation workflow that needs no EDA installation |
 | [HWE-Bench](https://arxiv.org/abs/2603.18102) | board-level schematic-design tasks with datasheets | static and simulator-based evaluation | a much lighter workflow that students can run without EDA infrastructure |
 | [Frontier-Eng](https://arxiv.org/abs/2604.12290) | executable generative-optimization tasks across engineering domains | task-specific verifiers | specialized introductory-to-intermediate EE calculations and no-API collection |
 | [models.dev](https://github.com/anomalyco/models.dev) | model capability, limit, and pricing metadata | registry rather than capability benchmark | actual task generation, response evidence, grading, and experiment reports |
 | [Open Responses](https://www.openresponses.org/) | interoperable language-model response API specification | protocol conformance | provider-independent research evaluation, including use without an API |
 
 The table does not claim that OhmJudge replaces these projects. EEE-Bench and
-CIRCUIT provide broader curated knowledge; HWE-Bench reaches realistic
+CIRCUIT provide broader curated knowledge; PCB-Bench and HWE-Bench reach realistic
 schematic design; Frontier-Eng tests open-ended engineering optimization.
 OhmJudge's present tasks are smaller and easier to audit.
 
@@ -32,8 +33,10 @@ between a static academic benchmark and a full benchmark infrastructure stack:
 5. publish enough artifacts for another person to audit the claim.
 
 This is a product and methodology hypothesis, not evidence of unique novelty.
-Adoption, external task-pack contributions, and independently reproduced
-experiments are the tests that matter.
+Manual-input support also exists in general evaluation frameworks; OhmJudge's
+claim is the integrated EE-specific chain, not the invention of copy/paste
+collection. Adoption, external task-pack contributions, and independently
+reproduced experiments are the tests that matter.
 
 ## Deliberate non-goals
 

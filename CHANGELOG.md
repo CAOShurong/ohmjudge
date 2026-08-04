@@ -6,6 +6,22 @@ All notable changes are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-08-05
+
+### Added
+
+- Capture-protocol fields in the no-API lab for surface, visible settings,
+  tools, and retry policy.
+- Strict `audit --require-protocol` validation with per-model metadata coverage.
+- Versioned wheel installation instructions and release checksum policy.
+
+### Changed
+
+- Rebuilt the README figures, project site, no-API lab, and report in a
+  restrained, print-inspired academic visual system.
+- Clarified the project's narrow decision boundary and competitive position.
+- Upgraded GitHub Actions and added build-and-install package verification.
+
 ## [0.1.0] - 2026-08-04
 
 ### Added
@@ -20,5 +36,6 @@ All notable changes are documented here. The format follows
 - A responsive project site with a generated no-API lab and synthetic report.
 - Synthetic demo artifacts, schemas, methodology, and contribution guides.
 
-[Unreleased]: https://github.com/CAOShurong/ohmjudge/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/CAOShurong/ohmjudge/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/CAOShurong/ohmjudge/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/CAOShurong/ohmjudge/releases/tag/v0.1.0

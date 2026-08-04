@@ -182,6 +182,7 @@ def _cmd_audit(args: argparse.Namespace) -> int:
         grades=grades,
         prices=prices,
         require_complete=args.require_complete,
+        require_protocol=args.require_protocol,
     )
     if args.output:
         write_json(args.output, result)
@@ -313,6 +314,14 @@ def build_parser() -> argparse.ArgumentParser:
     audit.add_argument("--grades")
     audit.add_argument("--pricing")
     audit.add_argument("--require-complete", action="store_true")
+    audit.add_argument(
+        "--require-protocol",
+        action="store_true",
+        help=(
+            "require captured_at, surface, settings, tools, and retry_policy "
+            "metadata on every response"
+        ),
+    )
     audit.add_argument("--output")
     audit.set_defaults(func=_cmd_audit)
 

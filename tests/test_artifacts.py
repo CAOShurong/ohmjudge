@@ -18,6 +18,8 @@ class ArtifactTests(unittest.TestCase):
             html = output.read_text(encoding="utf-8")
         self.assertIn("No-API frontier-model bench", html)
         self.assertIn("localStorage", html)
+        self.assertIn("capture protocol", html.lower())
+        self.assertIn("retry_policy", html)
         self.assertNotIn("https://api.", html)
         self.assertNotIn("<script src=", html)
 

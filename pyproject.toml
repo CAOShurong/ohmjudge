@@ -4,11 +4,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ohmjudge"
-version = "0.1.0"
+version = "0.2.0"
 description = "Fresh, executable electrical-engineering benchmarks for frontier language models."
 readme = "README.md"
 requires-python = ">=3.11"
-license = { text = "MIT" }
+license = "MIT"
 authors = [{ name = "Shurong Cao" }]
 keywords = [
   "llm",
@@ -20,7 +20,6 @@ keywords = [
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Environment :: Console",
-  "License :: OSI Approved :: MIT License",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",

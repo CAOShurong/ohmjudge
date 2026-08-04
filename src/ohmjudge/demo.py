@@ -59,7 +59,14 @@ def build_demo(
                         "input_tokens": max(1, int(rng.gauss(input_tokens, 25))),
                         "output_tokens": max(1, int(rng.gauss(output_tokens, 9))),
                     },
-                    metadata={"synthetic": True},
+                    metadata={
+                        "synthetic": True,
+                        "captured_at": "2026-08-05T00:00:00Z",
+                        "surface": "synthetic-fixture",
+                        "settings": "not-applicable",
+                        "tools": "not-applicable",
+                        "retry_policy": "none",
+                    },
                 )
             )
 
@@ -121,6 +128,7 @@ def build_demo(
             grades=grades,
             prices=prices,
             require_complete=True,
+            require_protocol=True,
         ),
     )
     write_json(

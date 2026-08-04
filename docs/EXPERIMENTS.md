@@ -32,8 +32,10 @@ ohmjudge lab --tasks tasks.private.jsonl --output lab.html
 ```
 
 Use one model label per visible product configuration. Do not silently merge
-answers from two modes under one label. Export the response JSONL and preserve it
-unchanged.
+answers from two modes under one label. Fill in the lab's capture-protocol fields
+for product surface, visible settings, tools, and retry policy. The export adds
+those fields, a capture timestamp, and the suite commitment to every response.
+Export the response JSONL and preserve it unchanged.
 
 ## 4. Grade and audit
 
@@ -48,12 +50,14 @@ ohmjudge audit \
   --responses responses.jsonl \
   --grades grades.jsonl \
   --require-complete \
+  --require-protocol \
   --output audit.json
 ```
 
 The audit checks duplicate and unknown references, expected-value finiteness,
-units, tolerances, per-model coverage, and deterministic recomputation of every
-supplied grade.
+units, tolerances, per-model coverage, capture-protocol completeness, and
+deterministic recomputation of every supplied grade. Omit `--require-protocol`
+only for legacy response files; incomplete metadata then remains a warning.
 
 ## 5. Compare paired outcomes
 

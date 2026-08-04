@@ -3,161 +3,153 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="OhmJudge generates fresh electrical-engineering tasks and grades frontier-model answers with deterministic local code. No API required.">
-  <meta name="theme-color" content="#07181c">
-  <title>OhmJudge — executable EE benchmarks</title>
+  <meta name="description" content="OhmJudge is a zero-dependency toolkit for fresh, auditable electrical-engineering model evaluations. No API required.">
+  <meta name="theme-color" content="#fbfaf7">
+  <title>OhmJudge — auditable EE model evaluation</title>
   <style>
-    :root{--bg:#061419;--panel:#0e252b;--panel2:#14323a;--ink:#edf8f7;--muted:#94aeae;--line:#284b54;--teal:#55e0c1;--blue:#75a8ff;--amber:#ffc65c;--coral:#ff7c72;--width:1160px}
-    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 85% 0,#153944 0,transparent 30%),linear-gradient(180deg,#07181d,#061419 70%);color:var(--ink);font:15px/1.65 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-    a{color:inherit}code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}.shell{width:min(var(--width),calc(100% - 40px));margin:auto}.nav{height:76px;display:flex;align-items:center;justify-content:space-between}.brand{display:flex;align-items:center;gap:11px;text-decoration:none;font-weight:850;font-size:18px}.brand b{display:grid;place-items:center;width:34px;height:34px;border-radius:11px;background:var(--teal);color:#042024;font-size:19px}.navlinks{display:flex;align-items:center;gap:24px;color:var(--muted)}.navlinks a{text-decoration:none}.navlinks a:hover{color:var(--ink)}.button{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 17px;border-radius:12px;background:var(--teal);color:#042024;text-decoration:none;font-weight:800;border:1px solid transparent}.button.secondary{background:#112b32;color:var(--ink);border-color:var(--line)}.button:hover{transform:translateY(-1px)}
-    .hero{display:grid;grid-template-columns:1.15fr .85fr;gap:54px;align-items:center;padding:78px 0 92px}.kicker{color:var(--teal);text-transform:uppercase;letter-spacing:.16em;font-size:12px;font-weight:850}.hero h1{font-size:clamp(43px,7vw,78px);letter-spacing:-.055em;line-height:.97;margin:16px 0 25px;max-width:760px}.hero h1 span{color:var(--teal)}.lede{font-size:19px;color:#abc3c2;max-width:680px}.actions{display:flex;gap:11px;flex-wrap:wrap;margin-top:30px}.micro{display:flex;gap:18px;flex-wrap:wrap;color:var(--muted);font-size:13px;margin-top:24px}.micro span:before{content:"✓";color:var(--teal);margin-right:7px;font-weight:900}
-    .scope{position:relative;min-height:440px;border:1px solid var(--line);border-radius:26px;background:linear-gradient(150deg,#12343a,#0a1e25);overflow:hidden;box-shadow:0 30px 90px #0008}.scope:before{content:"";position:absolute;inset:0;background-image:linear-gradient(#a8d5d20b 1px,transparent 1px),linear-gradient(90deg,#a8d5d20b 1px,transparent 1px);background-size:30px 30px}.wave{position:absolute;inset:62px 24px auto;width:calc(100% - 48px);height:180px}.trace{fill:none;stroke:var(--teal);stroke-width:5;filter:drop-shadow(0 0 7px #55e0c188)}.axis{stroke:#46636a;stroke-width:1}.scope-copy{position:absolute;left:29px;right:29px;bottom:27px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.scope-card{padding:14px;border:1px solid #315761;border-radius:13px;background:#081b20cc}.scope-card strong{display:block;font-size:22px}.scope-card span{color:var(--muted);font-size:12px}
-    .stats{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:20px;background:#0b2026;overflow:hidden}.stat{padding:24px 28px;border-right:1px solid var(--line)}.stat:last-child{border:0}.stat strong{font-size:31px;display:block}.stat span{color:var(--muted)}
-    section{padding:90px 0}.section-head{display:flex;justify-content:space-between;gap:30px;align-items:end;margin-bottom:34px}.section-head h2{font-size:clamp(30px,4.5vw,50px);line-height:1.05;letter-spacing:-.035em;margin:0;max-width:700px}.section-head p{color:var(--muted);max-width:430px;margin:0}
-    .pipeline{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.stage{position:relative;min-height:190px;padding:22px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(180deg,var(--panel2),var(--panel))}.stage:not(:last-child):after{content:"→";position:absolute;right:-19px;top:80px;color:var(--teal);font-size:20px;z-index:2}.num{color:var(--teal);font:700 12px ui-monospace,monospace}.stage h3{font-size:19px;margin:32px 0 8px}.stage p{color:var(--muted);margin:0;font-size:13px}.artifact{display:inline-block;margin-top:16px;color:var(--amber);font:11px ui-monospace,monospace}
-    .domains{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.domain{padding:20px;border:1px solid var(--line);border-radius:17px;background:#0c2228;min-height:150px}.domain i{display:grid;place-items:center;width:38px;height:38px;border-radius:11px;background:#173a40;color:var(--teal);font-style:normal;font-weight:900}.domain h3{font-size:16px;margin:17px 0 5px}.domain p{color:var(--muted);font-size:12px;margin:0}.domain:hover{border-color:#55e0c177;background:#102a30}
-    .evidence{display:grid;grid-template-columns:1fr 1fr;gap:18px}.terminal{border:1px solid var(--line);border-radius:20px;background:#051419;overflow:hidden}.terminal-top{display:flex;gap:7px;padding:13px 16px;border-bottom:1px solid #18343b}.terminal-top i{width:8px;height:8px;border-radius:50%;background:#365a61}.terminal-top i:first-child{background:var(--coral)}.terminal-top i:nth-child(2){background:var(--amber)}.terminal-top i:nth-child(3){background:var(--teal)}pre{margin:0;padding:24px;overflow:auto;color:#b9cecd;font-size:13px;line-height:1.75}.prompt-card{border:1px solid var(--line);border-radius:20px;padding:26px;background:linear-gradient(145deg,#17313a,#0d2229)}.prompt-card .label{color:var(--amber);font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:800}.prompt-card blockquote{font-size:18px;line-height:1.55;margin:18px 0;padding:0;border:0}.json{padding:13px;border-radius:11px;background:#07191e;color:var(--teal);font-family:ui-monospace,monospace}.verdict{display:flex;justify-content:space-between;align-items:center;margin-top:17px;padding-top:15px;border-top:1px solid var(--line)}.pass{color:var(--teal);font-weight:850}
-    .callout{display:grid;grid-template-columns:1fr auto;gap:30px;align-items:center;padding:42px;border:1px solid #4ecdb75c;border-radius:24px;background:linear-gradient(110deg,#123a3b,#112638)}.callout h2{font-size:32px;margin:0 0 9px}.callout p{color:#aac3c2;margin:0;max-width:680px}
-    .limitations{display:grid;grid-template-columns:1fr 1fr;gap:14px}.limit{padding:23px;border-left:3px solid var(--amber);background:#0d2228;border-radius:0 14px 14px 0}.limit strong{display:block;margin-bottom:5px}.limit span{color:var(--muted)}
-    footer{padding:45px 0 60px;border-top:1px solid #18363d;color:var(--muted);display:flex;justify-content:space-between;gap:20px}.footlinks{display:flex;gap:18px}
-    @media(max-width:900px){.hero{grid-template-columns:1fr}.scope{min-height:380px}.stats{grid-template-columns:repeat(2,1fr)}.stat:nth-child(2){border-right:0}.stat:nth-child(-n+2){border-bottom:1px solid var(--line)}.pipeline{grid-template-columns:1fr 1fr}.stage:not(:last-child):after{display:none}.domains{grid-template-columns:repeat(2,1fr)}.evidence{grid-template-columns:1fr}}
-    @media(max-width:620px){.shell{width:min(100% - 24px,var(--width))}.navlinks>a:not(.button){display:none}.hero{padding:48px 0 65px}.stats{grid-template-columns:1fr}.stat,.stat:nth-child(2){border-right:0;border-bottom:1px solid var(--line)}.pipeline,.domains,.limitations{grid-template-columns:1fr}.section-head,.callout,footer{display:block}.callout .button{margin-top:22px}.footlinks{margin-top:16px;flex-wrap:wrap}}
+    :root{--paper:#fbfaf7;--white:#fff;--ink:#172630;--muted:#617079;--line:#d3d0c8;--blue:#2f6f9f;--navy:#15324b;--rust:#b65d3a;--green:#55723b;--soft-blue:#edf3f7;--soft-rust:#f8f0e8;--width:1120px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.65 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}a{color:inherit}.shell{width:min(var(--width),calc(100% - 40px));margin:auto}.nav{min-height:72px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:Georgia,"Times New Roman",serif;font-size:20px;font-weight:700}.brand-mark{display:grid;place-items:center;width:31px;height:31px;border:1.5px solid var(--navy);color:var(--navy)}.navlinks{display:flex;align-items:center;gap:22px;color:var(--muted);font-size:14px}.navlinks a{text-decoration:none}.navlinks a:hover{color:var(--blue)}
+    .hero{display:grid;grid-template-columns:1.05fr .95fr;gap:74px;align-items:center;padding:86px 0 74px}.kicker{color:var(--blue);font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase}.hero h1{font-family:Georgia,"Times New Roman",serif;font-size:clamp(43px,6.2vw,70px);letter-spacing:-.035em;line-height:1.02;margin:16px 0 24px;max-width:680px}.lede{font-size:19px;color:#4f6069;max-width:650px}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:29px}.button{display:inline-flex;align-items:center;justify-content:center;padding:10px 15px;border:1px solid var(--navy);background:var(--navy);color:#fff;text-decoration:none;font-weight:750}.button.secondary{background:transparent;color:var(--navy)}.micro{margin-top:21px;color:var(--muted);font-size:13px}
+    .figure{background:var(--white);border:1px solid var(--line);padding:25px}.figure-head{display:flex;justify-content:space-between;gap:12px;align-items:center;padding-bottom:15px;border-bottom:1px solid var(--line)}.figure-head strong{font-family:Georgia,"Times New Roman",serif;font-size:18px}.figure-head span{color:var(--muted);font-size:11px}.plot{display:block;width:100%;height:auto;margin:16px 0 5px}.figure-caption{color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:13px}
+    .facts{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);background:var(--white)}.fact{padding:21px 24px;border-right:1px solid var(--line)}.fact:last-child{border:0}.fact strong{font-family:Georgia,"Times New Roman",serif;font-size:28px;display:block;color:var(--navy)}.fact span{color:var(--muted);font-size:13px}
+    section{padding:82px 0}.section-head{display:grid;grid-template-columns:.9fr 1.1fr;gap:70px;margin-bottom:36px}.section-head h2{font-family:Georgia,"Times New Roman",serif;font-size:clamp(30px,4.2vw,46px);line-height:1.08;letter-spacing:-.025em;margin:0}.section-head p{color:var(--muted);font-size:17px;margin:4px 0 0}
+    .workflow{display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}.stage{padding:24px 18px 25px;border-right:1px solid var(--line)}.stage:last-child{border:0}.stage .num{display:block;color:var(--blue);font-size:11px;font-weight:800;letter-spacing:.12em}.stage h3{font-family:Georgia,"Times New Roman",serif;font-size:19px;margin:24px 0 7px}.stage p{color:var(--muted);font-size:13px;min-height:63px}.artifact{color:var(--rust);font:11px ui-monospace,SFMono-Regular,Consolas,monospace;overflow-wrap:anywhere}
+    .decision{display:grid;grid-template-columns:1fr 1fr;gap:18px}.question,.answer{padding:30px;border:1px solid var(--line);background:var(--white)}.question{border-top:4px solid var(--rust)}.answer{border-top:4px solid var(--blue)}.label{color:var(--muted);font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}.decision h3{font-family:Georgia,"Times New Roman",serif;font-size:25px;line-height:1.25;margin:13px 0}.decision p{color:var(--muted);margin:0}.contract{display:grid;grid-template-columns:auto 1fr;gap:10px 15px;margin-top:19px;padding-top:18px;border-top:1px solid var(--line);font-size:13px}.contract dt{color:var(--muted)}.contract dd{margin:0;font-family:ui-monospace,SFMono-Regular,Consolas,monospace}
+    .landscape{width:100%;border-collapse:collapse;background:var(--white);border:1px solid var(--line)}.landscape th,.landscape td{text-align:left;padding:15px 17px;border-bottom:1px solid var(--line);vertical-align:top}.landscape th{color:var(--muted);font-size:11px;letter-spacing:.08em;text-transform:uppercase;background:#f4f3ef}.landscape td:first-child{font-weight:750}.landscape tr:last-child td{border-bottom:0}.landscape .ours{background:var(--soft-blue)}.scope-note{margin-top:16px;color:var(--muted);font-size:13px}
+    .domains{display:grid;grid-template-columns:repeat(2,1fr);gap:0;border-top:1px solid var(--line)}.domain{display:grid;grid-template-columns:48px 1fr;gap:15px;padding:18px 0;border-bottom:1px solid var(--line)}.domain:nth-child(odd){padding-right:28px}.domain:nth-child(even){padding-left:28px}.symbol{display:grid;place-items:center;width:39px;height:39px;border:1px solid #9eabb1;color:var(--navy);font-family:Georgia,serif}.domain h3{font-size:15px;margin:0 0 3px}.domain p{color:var(--muted);font-size:12px;margin:0}
+    .limitations{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.limit{padding:20px;border-left:3px solid var(--rust);background:var(--soft-rust)}.limit strong{display:block;margin-bottom:4px}.limit span{color:var(--muted);font-size:13px}.callout{display:grid;grid-template-columns:1fr auto;gap:30px;align-items:center;padding:38px;border:1px solid #9eabb1;background:var(--soft-blue)}.callout h2{font-family:Georgia,"Times New Roman",serif;font-size:31px;margin:0 0 8px}.callout p{color:var(--muted);margin:0;max-width:700px}footer{padding:38px 0 50px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:20px;color:var(--muted);font-size:13px}.footlinks{display:flex;gap:17px}
+    @media(max-width:900px){.hero,.section-head{grid-template-columns:1fr;gap:36px}.workflow{grid-template-columns:1fr}.stage{border-right:0;border-bottom:1px solid var(--line)}.stage:last-child{border-bottom:0}.stage p{min-height:0}.facts{grid-template-columns:repeat(2,1fr)}.fact:nth-child(2){border-right:0}.fact:nth-child(-n+2){border-bottom:1px solid var(--line)}}@media(max-width:620px){.shell{width:min(100% - 24px,var(--width))}.navlinks a:not(:last-child){display:none}.hero{padding:54px 0}.facts,.decision,.domains,.limitations{grid-template-columns:1fr}.fact{border-right:0;border-bottom:1px solid var(--line)}.domain:nth-child(odd),.domain:nth-child(even){padding:17px 0}.callout,footer{display:block}.callout .button{margin-top:20px}.footlinks{margin-top:14px;flex-wrap:wrap}.landscape-wrap{overflow-x:auto}}
   </style>
 </head>
 <body>
-  <nav class="shell nav">
-    <a class="brand" href="#"><b>Ω</b> OhmJudge</a>
+  <nav class="shell nav" aria-label="Primary">
+    <a class="brand" href="#"><span class="brand-mark">Ω</span>OhmJudge</a>
     <div class="navlinks">
       <a href="#method">Method</a>
-      <a href="#domains">Domains</a>
-      <a href="#evidence">Evidence</a>
-      <a class="button secondary" href="https://github.com/CAOShurong/ohmjudge">View source ↗</a>
+      <a href="#position">Position</a>
+      <a href="#scope">Scope</a>
+      <a href="https://github.com/CAOShurong/ohmjudge">Source ↗</a>
     </div>
   </nav>
 
   <main>
     <header class="shell hero">
       <div>
-        <div class="kicker">Executable electrical-engineering evaluation</div>
-        <h1>Fresh problems.<br><span>Local verdicts.</span></h1>
-        <p class="lede">Generate a new EE benchmark, copy each prompt into any frontier model's web app, and grade every answer with deterministic Python—not another language model.</p>
+        <div class="kicker">Open research software · electrical engineering</div>
+        <h1>Measure a model. Keep the evidence.</h1>
+        <p class="lede">OhmJudge builds a fresh, committed suite of EE calculations, collects answers from any web interface, and grades values and units with local Python rules.</p>
         <div class="actions">
-          <a class="button" href="demo/no-api-lab.html">Open the no-API lab →</a>
-          <a class="button secondary" href="demo/report.html">Explore a synthetic report</a>
+          <a class="button" href="demo/no-api-lab.html">Open the no-API lab</a>
+          <a class="button secondary" href="demo/report.html">Inspect a synthetic report</a>
         </div>
-        <div class="micro"><span>No API required</span><span>Zero runtime dependencies</span><span>MIT licensed</span></div>
+        <div class="micro">Python 3.11+ · zero runtime dependencies · MIT License · no account or API key required</div>
       </div>
-      <div class="scope" aria-label="Stylized benchmark signal display">
-        <svg class="wave" viewBox="0 0 500 180" role="img" aria-label="An electrical waveform becoming a checked digital result">
-          <path class="axis" d="M0 90H500M125 0V180M250 0V180M375 0V180"/>
-          <path class="trace" d="M0 90C18 18 42 18 62 90s44 72 63 0 44-72 63 0 44 72 62 0h32l12-28 18 56 19-74 22 46h40l15-18 18 18h73"/>
-          <circle cx="500" cy="90" r="8" fill="#55e0c1"/>
+      <figure class="figure" aria-labelledby="plot-title">
+        <div class="figure-head"><strong id="plot-title">Deterministic task verdict</strong><span>ILLUSTRATIVE TRACE</span></div>
+        <svg class="plot" viewBox="0 0 520 300" role="img" aria-label="Waveform and reference measurement plot">
+          <g stroke="#dedbd4"><path d="M58 36V246M58 246H490"/><path d="M58 88H490M58 141H490M58 194H490M166 36V246M274 36V246M382 36V246"/></g>
+          <g fill="#6d7a82" font-family="Inter,Arial,sans-serif" font-size="11"><text x="48" y="41" text-anchor="end">1.0</text><text x="48" y="145" text-anchor="end">0.0</text><text x="48" y="249" text-anchor="end">−1.0</text><text x="58" y="268" text-anchor="middle">0</text><text x="274" y="268" text-anchor="middle">time</text><text x="490" y="268" text-anchor="middle">T</text></g>
+          <path d="M58 141C78 49 100 49 120 141S162 233 182 141 224 49 244 141 286 233 306 141 348 49 368 141 410 233 430 141" fill="none" stroke="#2f6f9f" stroke-width="3"/>
+          <circle cx="430" cy="141" r="5" fill="#2f6f9f"/><line x1="430" y1="141" x2="458" y2="110" stroke="#b65d3a" stroke-width="2"/><circle cx="458" cy="110" r="5" fill="#b65d3a"/>
+          <text x="470" y="102" text-anchor="end" fill="#b65d3a" font-family="Inter,Arial,sans-serif" font-size="11" font-weight="700">PASS · within tolerance</text>
         </svg>
-        <div class="scope-copy">
-          <div class="scope-card"><strong>50</strong><span>procedural templates</span></div>
-          <div class="scope-card"><strong>10</strong><span>EE domains</span></div>
-          <div class="scope-card"><strong>SHA-256</strong><span>suite commitment</span></div>
-          <div class="scope-card"><strong>JSONL</strong><span>portable evidence</span></div>
-        </div>
-      </div>
+        <figcaption class="figure-caption">Observed 15.59 kW · reference 15.5885 kW · unit-normalized absolute error 0.0015 kW</figcaption>
+      </figure>
     </header>
 
-    <div class="shell stats">
-      <div class="stat"><strong>0</strong><span>runtime dependencies</span></div>
-      <div class="stat"><strong>50</strong><span>fresh task families</span></div>
-      <div class="stat"><strong>95%</strong><span>Wilson intervals</span></div>
-      <div class="stat"><strong>1 file</strong><span>standalone lab or report</span></div>
+    <div class="shell facts" aria-label="Project facts">
+      <div class="fact"><strong>50</strong><span>seeded task templates</span></div>
+      <div class="fact"><strong>10</strong><span>EE domains</span></div>
+      <div class="fact"><strong>0</strong><span>runtime dependencies</span></div>
+      <div class="fact"><strong>5</strong><span>auditable artifacts</span></div>
     </div>
 
     <section id="method" class="shell">
       <div class="section-head">
-        <h2>An evaluation chain you can inspect end to end.</h2>
-        <p>Each stage produces a plain artifact. Publish the evidence, rerun the grader, and check the same result without trusting a dashboard.</p>
+        <h2>An evaluation chain another researcher can inspect.</h2>
+        <p>Each step creates a plain file. The private answer key stays separate from the public prompts; the final audit recomputes every verdict instead of trusting the report.</p>
       </div>
-      <div class="pipeline">
+      <div class="workflow">
         <article class="stage"><span class="num">01 / GENERATE</span><h3>Fresh suite</h3><p>Seeded generators vary physical parameters while preserving the governing equations.</p><span class="artifact">tasks.private.jsonl</span></article>
-        <article class="stage"><span class="num">02 / COMMIT</span><h3>Freeze intent</h3><p>A SHA-256 commitment records the exact private suite before answers are collected.</p><span class="artifact">prompts.public.jsonl</span></article>
-        <article class="stage"><span class="num">03 / COLLECT</span><h3>Any model</h3><p>Use ordinary web chat, an optional API adapter, or replay an existing response set.</p><span class="artifact">responses.jsonl</span></article>
-        <article class="stage"><span class="num">04 / VERIFY</span><h3>Local grader</h3><p>Normalize units, apply declared tolerances, and classify concrete failure modes.</p><span class="artifact">grades.jsonl</span></article>
-        <article class="stage"><span class="num">05 / AUDIT</span><h3>Publish evidence</h3><p>Recompute every verdict, inspect coverage, and compare models on paired tasks.</p><span class="artifact">audit.json</span></article>
+        <article class="stage"><span class="num">02 / COMMIT</span><h3>Freeze intent</h3><p>SHA-256 records the exact suite before model answers are collected.</p><span class="artifact">prompts.public.jsonl</span></article>
+        <article class="stage"><span class="num">03 / COLLECT</span><h3>Any surface</h3><p>Use a web product, optional API adapter, or a replayed response set.</p><span class="artifact">responses.jsonl</span></article>
+        <article class="stage"><span class="num">04 / GRADE</span><h3>Local rules</h3><p>Normalize units, apply declared tolerances, and classify concrete failure modes.</p><span class="artifact">grades.jsonl</span></article>
+        <article class="stage"><span class="num">05 / AUDIT</span><h3>Verify evidence</h3><p>Check protocol metadata, coverage, duplicates, and deterministic recomputation.</p><span class="artifact">audit.json</span></article>
       </div>
     </section>
 
-    <section id="domains" class="shell">
+    <section class="shell">
       <div class="section-head">
-        <h2>Ten domains, not one disguised formula.</h2>
-        <p>Every domain contains five independently named templates. The current release emphasizes auditable numerical reasoning and unit discipline.</p>
+        <h2>A narrow decision, stated precisely.</h2>
+        <p>OhmJudge avoids the false precision of a universal intelligence score. It answers one reproducible question about scalar EE calculations and exposes the evidence behind the answer.</p>
+      </div>
+      <div class="decision">
+        <article class="question"><div class="label">Research question</div><h3>Can a model solve the same committed EE suite with correct values and units?</h3><p>Fresh parameters reduce exact-answer memorization. They do not make familiar formulas or task structures secret.</p></article>
+        <article class="answer"><div class="label">Machine-checkable contract</div><h3>A number, a dimension, a declared unit, and an explicit tolerance.</h3><dl class="contract"><dt>response</dt><dd>{"answer": 15.59, "unit": "kW"}</dd><dt>judge</dt><dd>deterministic Python</dd><dt>evidence</dt><dd>portable JSONL + HTML</dd></dl></article>
+      </div>
+    </section>
+
+    <section id="position" class="shell">
+      <div class="section-head">
+        <h2>Where it fits—and where it does not.</h2>
+        <p>The project is not the first EE benchmark. Its practical contribution is the combination of user-generated suites, a no-API capture lab, unit-aware local grading, and an artifact-level audit.</p>
+      </div>
+      <div class="landscape-wrap">
+        <table class="landscape">
+          <thead><tr><th>Approach</th><th>Best at</th><th>Typical requirement</th><th>OhmJudge distinction</th></tr></thead>
+          <tbody>
+            <tr><td>EEE-Bench / CIRCUIT</td><td>Broad curated EE knowledge and multimodal questions</td><td>Static published datasets</td><td>Fresh seeded scalar suites and local collection</td></tr>
+            <tr><td>PCB-Bench / EDA tasks</td><td>Realistic board, layout, and design artifacts</td><td>EDA infrastructure and heavier verification</td><td>Runs on a laptop; deliberately narrower construct</td></tr>
+            <tr><td>General evaluation frameworks</td><td>Many providers, datasets, and judge types</td><td>Configuration, APIs, or external services</td><td>Purpose-built browser workflow for an EE researcher</td></tr>
+            <tr class="ours"><td>OhmJudge</td><td>Repeatable scalar EE calculation studies</td><td>Python 3.11 and a browser</td><td>Fresh suite + capture protocol + deterministic audit</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="scope-note">This positioning is a testable product hypothesis, not a claim of unique academic novelty. Independent studies, task-pack contributions, and reproduced results are the evidence that would validate it.</p>
+    </section>
+
+    <section id="scope" class="shell">
+      <div class="section-head">
+        <h2>Ten domains with explicit calculation contracts.</h2>
+        <p>The present release targets introductory-to-intermediate numerical reasoning and unit discipline. It does not infer professional hardware-design competence.</p>
       </div>
       <div class="domains">
-        <article class="domain"><i>V</i><h3>Circuits</h3><p>Dividers, filters, op-amps, Thevenin models, series networks.</p></article>
-        <article class="domain"><i>∿</i><h3>Signals</h3><p>RMS, sampling, aliases, energy, convolution.</p></article>
-        <article class="domain"><i>ζ</i><h3>Control</h3><p>Poles, overshoot, settling, stability, gain.</p></article>
-        <article class="domain"><i>RF</i><h3>Communications</h3><p>Capacity, path loss, noise, symbols, link budgets.</p></article>
-        <article class="domain"><i>Q</i><h3>Electronics</h3><p>Diodes, BJTs, MOSFETs, ADCs, slew rate.</p></article>
-        <article class="domain"><i>3φ</i><h3>Power</h3><p>Three-phase loads, transformers, energy, PF, batteries.</p></article>
-        <article class="domain"><i>λ</i><h3>Electromagnetics</h3><p>Waves, fields, capacitance, magnetic flux, inductance.</p></article>
-        <article class="domain"><i>01</i><h3>Digital</h3><p>Timing, clock limits, counters, encodings, distance.</p></article>
-        <article class="domain"><i>µC</i><h3>Embedded</h3><p>UART, PWM, timers, buffers, I2C transfers.</p></article>
-        <article class="domain"><i>Δ</i><h3>Instrumentation</h3><p>Shunts, sensors, uncertainty, dB, bridge outputs.</p></article>
+        <article class="domain"><span class="symbol">V</span><div><h3>Circuits</h3><p>Dividers, filters, op-amps, Thevenin models, series networks.</p></div></article>
+        <article class="domain"><span class="symbol">∿</span><div><h3>Signals</h3><p>RMS, sampling, aliases, energy, and convolution.</p></div></article>
+        <article class="domain"><span class="symbol">ζ</span><div><h3>Control</h3><p>Poles, overshoot, settling, stability, and gain.</p></div></article>
+        <article class="domain"><span class="symbol">RF</span><div><h3>Communications</h3><p>Capacity, path loss, noise, symbols, and link budgets.</p></div></article>
+        <article class="domain"><span class="symbol">Q</span><div><h3>Electronics</h3><p>Diodes, BJTs, MOSFETs, ADCs, and slew rate.</p></div></article>
+        <article class="domain"><span class="symbol">3φ</span><div><h3>Power</h3><p>Three-phase loads, transformers, energy, PF, and batteries.</p></div></article>
+        <article class="domain"><span class="symbol">λ</span><div><h3>Electromagnetics</h3><p>Waves, fields, capacitance, magnetic flux, and inductance.</p></div></article>
+        <article class="domain"><span class="symbol">01</span><div><h3>Digital</h3><p>Timing, clock limits, counters, encodings, and distance.</p></div></article>
+        <article class="domain"><span class="symbol">µC</span><div><h3>Embedded</h3><p>UART, PWM, timers, buffers, and I²C transfers.</p></div></article>
+        <article class="domain"><span class="symbol">Δ</span><div><h3>Instrumentation</h3><p>Shunts, sensors, uncertainty, dB, and bridge outputs.</p></div></article>
       </div>
     </section>
 
-    <section id="evidence" class="shell">
+    <section class="shell">
       <div class="section-head">
-        <h2>No hidden judge. No mandatory cloud.</h2>
-        <p>The answer contract is deliberately small. Mathematical correctness and format compliance remain separately inspectable.</p>
+        <h2>Limits are part of the result.</h2>
+        <p>A score is useful only inside the construct actually measured.</p>
       </div>
-      <div class="evidence">
-        <div class="terminal">
-          <div class="terminal-top"><i></i><i></i><i></i></div>
-          <pre><span style="color:#55e0c1">$</span> pip install -e .
-
-<span style="color:#55e0c1">$</span> ohmjudge generate --count 50 --seed 2026 \
-    --output tasks.private.jsonl \
-    --public-output prompts.public.jsonl
-
-{
-  "tasks": 50,
-  "packs": ["circuits", "…", "instrumentation"],
-  "commitment": "sha256:…"
-}
-
-<span style="color:#55e0c1">$</span> ohmjudge lab \
-    --tasks tasks.private.jsonl \
-    --output lab.html</pre>
-        </div>
-        <div class="prompt-card">
-          <div class="label">Example task contract</div>
-          <blockquote>A balanced three-phase load draws 25 A from a 400 V line-to-line supply at power factor 0.9. What is the total real power in kW?</blockquote>
-          <div class="json">{"answer": 15.5885, "unit": "kW"}</div>
-          <div class="verdict"><span>Unit-normalized error within tolerance</span><span class="pass">✓ PASS</span></div>
-        </div>
+      <div class="limitations">
+        <div class="limit"><strong>Not professional certification.</strong><span>Scalar calculations do not establish safe hardware-design competence.</span></div>
+        <div class="limit"><strong>Not contamination-proof.</strong><span>Fresh values reduce exact memorization; formulas and template families remain familiar.</span></div>
+        <div class="limit"><strong>Not an official model ranking.</strong><span>Product surface, visible label, settings, tools, date, and retries must be reported.</span></div>
+        <div class="limit"><strong>Not a replacement for simulation.</strong><span>SPICE, HDL, EDA, laboratory measurement, and safety validation remain outside this release.</span></div>
       </div>
     </section>
 
     <section class="shell">
       <div class="callout">
-        <div><h2>Run the complete workflow in your browser.</h2><p>The public demo uses fictional models and synthetic answers. It demonstrates the interface and evidence pipeline; it does not claim a real leaderboard result.</p></div>
-        <a class="button" href="demo/no-api-lab.html">Launch the lab →</a>
-      </div>
-    </section>
-
-    <section class="shell">
-      <div class="section-head">
-        <h2>Clear boundaries are part of the benchmark.</h2>
-        <p>A score is meaningful only inside the construct actually tested.</p>
-      </div>
-      <div class="limitations">
-        <div class="limit"><strong>Not professional certification.</strong><span>Scalar calculation performance does not establish safe hardware-design competence.</span></div>
-        <div class="limit"><strong>Not contamination-proof.</strong><span>Fresh parameters reduce exact memorization, but formulas and template families can remain familiar.</span></div>
-        <div class="limit"><strong>Not an official model ranking.</strong><span>Web products, API model IDs, routing, tools, and dates must be reported separately.</span></div>
-        <div class="limit"><strong>Not a replacement for simulation.</strong><span>SPICE, HDL, EDA, laboratory measurement, and safety validation remain future task classes.</span></div>
+        <div><h2>Run the complete workflow in one local HTML file.</h2><p>The public demo uses fictional model labels and synthetic responses. It demonstrates the interface and evidence pipeline; it does not claim a real leaderboard result.</p></div>
+        <a class="button" href="demo/no-api-lab.html">Launch the lab</a>
       </div>
     </section>
   </main>
 
   <footer class="shell">
-    <span>OhmJudge · MIT License · Built for auditable EE model evaluation.</span>
+    <span>OhmJudge · MIT License · Shurong Cao</span>
     <div class="footlinks"><a href="https://github.com/CAOShurong/ohmjudge">GitHub</a><a href="https://github.com/CAOShurong/ohmjudge/blob/main/docs/METHODOLOGY.md">Methodology</a><a href="https://github.com/CAOShurong/ohmjudge/blob/main/CONTRIBUTING.md">Contribute</a></div>
   </footer>
 </body>

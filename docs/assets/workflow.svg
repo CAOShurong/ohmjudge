@@ -1,71 +1,55 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="350" viewBox="0 0 1200 350" role="img" aria-labelledby="title desc">
-  <title id="title">OhmJudge workflow</title>
-  <desc id="desc">Five stages: generate fresh tasks, commit and separate answers, collect in any model web app, grade locally, then inspect and publish evidence.</desc>
-  <defs>
-    <linearGradient id="line" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#5dd6c7"/>
-      <stop offset="1" stop-color="#79a7ff"/>
-    </linearGradient>
-    <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%">
-      <feDropShadow dx="0" dy="7" stdDeviation="10" flood-color="#031015" flood-opacity=".28"/>
-    </filter>
-    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
-      <path d="M0 0l10 5-10 5z" fill="#6aaebe"/>
-    </marker>
-  </defs>
-  <rect width="1200" height="350" rx="24" fill="#091921"/>
-  <text x="60" y="58" fill="#edf9f7" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="27" font-weight="720">One experiment, five auditable stages</text>
-  <text x="60" y="87" fill="#8eadae" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="15">Artifacts stay local until you choose to publish them.</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="390" viewBox="0 0 1200 390" role="img" aria-labelledby="title desc">
+  <title id="title">OhmJudge reproducible evaluation workflow</title>
+  <desc id="desc">A five-stage horizontal research workflow from seeded task generation to an audited report, with the artifact produced at each stage.</desc>
+  <rect width="1200" height="390" rx="8" fill="#fbfaf7"/>
+  <rect x="1" y="1" width="1198" height="388" rx="7" fill="none" stroke="#d8d5cd"/>
+  <g font-family="Inter,Segoe UI,Arial,sans-serif">
+    <text x="56" y="57" fill="#172630" font-family="Georgia,Times New Roman,serif" font-size="29" font-weight="700">An inspectable experiment, not a hidden leaderboard</text>
+    <text x="56" y="86" fill="#64727a" font-size="15">Every transition leaves a portable artifact that another researcher can examine.</text>
 
-  <path d="M190 194h76M416 194h76M642 194h76M868 194h76" stroke="url(#line)" stroke-width="3" marker-end="url(#arrow)"/>
-
-  <g font-family="Inter,Segoe UI,Arial,sans-serif" filter="url(#shadow)">
-    <g transform="translate(60 125)">
-      <rect width="130" height="138" rx="18" fill="#102d35" stroke="#2e5a63"/>
-      <circle cx="65" cy="43" r="23" fill="#163e44"/>
-      <path d="M49 43h10l5-12 8 24 7-12h7" fill="none" stroke="#5dd6c7" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-      <text x="65" y="88" text-anchor="middle" fill="#e8f7f5" font-size="17" font-weight="700">Generate</text>
-      <text x="65" y="112" text-anchor="middle" fill="#91b2b2" font-size="13">seeded EE tasks</text>
+    <line x1="130" y1="185" x2="1070" y2="185" stroke="#9ba7ad" stroke-width="2"/>
+    <g fill="#fbfaf7" stroke-width="3">
+      <circle cx="130" cy="185" r="22" stroke="#2f6f9f"/>
+      <circle cx="365" cy="185" r="22" stroke="#2f6f9f"/>
+      <circle cx="600" cy="185" r="22" stroke="#b65d3a"/>
+      <circle cx="835" cy="185" r="22" stroke="#2f6f9f"/>
+      <circle cx="1070" cy="185" r="22" stroke="#667b42"/>
+    </g>
+    <g font-size="14" font-weight="800" text-anchor="middle">
+      <text x="130" y="190" fill="#2f6f9f">01</text>
+      <text x="365" y="190" fill="#2f6f9f">02</text>
+      <text x="600" y="190" fill="#b65d3a">03</text>
+      <text x="835" y="190" fill="#2f6f9f">04</text>
+      <text x="1070" y="190" fill="#667b42">05</text>
     </g>
 
-    <g transform="translate(286 125)">
-      <rect width="130" height="138" rx="18" fill="#122a37" stroke="#31536a"/>
-      <circle cx="65" cy="43" r="23" fill="#193a4d"/>
-      <path d="M52 43h26M65 30v26" stroke="#79a7ff" stroke-width="3" stroke-linecap="round"/>
-      <text x="65" y="88" text-anchor="middle" fill="#e8f1ff" font-size="17" font-weight="700">Commit</text>
-      <text x="65" y="112" text-anchor="middle" fill="#93aabd" font-size="13">hash + split keys</text>
+    <g text-anchor="middle">
+      <g transform="translate(130 0)">
+        <text y="137" fill="#172630" font-size="17" font-weight="700">Generate</text>
+        <text y="223" fill="#5f6e76" font-size="13">Seeded EE tasks</text>
+        <text y="300" fill="#15324b" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="12">tasks.private.jsonl</text>
+      </g>
+      <g transform="translate(365 0)">
+        <text y="137" fill="#172630" font-size="17" font-weight="700">Commit</text>
+        <text y="223" fill="#5f6e76" font-size="13">Freeze suite + prompts</text>
+        <text y="300" fill="#15324b" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="12">prompts.public.jsonl</text>
+      </g>
+      <g transform="translate(600 0)">
+        <text y="137" fill="#172630" font-size="17" font-weight="700">Collect</text>
+        <text y="223" fill="#5f6e76" font-size="13">Web app or optional API</text>
+        <text y="300" fill="#7a432c" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="12">responses.jsonl</text>
+      </g>
+      <g transform="translate(835 0)">
+        <text y="137" fill="#172630" font-size="17" font-weight="700">Grade</text>
+        <text y="223" fill="#5f6e76" font-size="13">Local unit-aware rules</text>
+        <text y="300" fill="#15324b" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="12">grades.jsonl</text>
+      </g>
+      <g transform="translate(1070 0)">
+        <text y="137" fill="#172630" font-size="17" font-weight="700">Audit</text>
+        <text y="223" fill="#5f6e76" font-size="13">Coverage + recomputation</text>
+        <text y="300" fill="#42552e" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="12">audit.json</text>
+      </g>
     </g>
-
-    <g transform="translate(512 125)">
-      <rect width="130" height="138" rx="18" fill="#2c2825" stroke="#5c5145"/>
-      <circle cx="65" cy="43" r="23" fill="#423830"/>
-      <path d="M49 34h32v21H62l-9 7v-7h-4z" fill="none" stroke="#f4bc66" stroke-width="3" stroke-linejoin="round"/>
-      <text x="65" y="88" text-anchor="middle" fill="#fff4e2" font-size="17" font-weight="700">Collect</text>
-      <text x="65" y="112" text-anchor="middle" fill="#bea98b" font-size="13">any model or API</text>
-    </g>
-
-    <g transform="translate(738 125)">
-      <rect width="130" height="138" rx="18" fill="#172b36" stroke="#365563"/>
-      <circle cx="65" cy="43" r="23" fill="#203b47"/>
-      <path d="M49 43l10 10 22-24" fill="none" stroke="#5dd6c7" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-      <text x="65" y="88" text-anchor="middle" fill="#e8f7f5" font-size="17" font-weight="700">Grade</text>
-      <text x="65" y="112" text-anchor="middle" fill="#91b2b2" font-size="13">local Python rules</text>
-    </g>
-
-    <g transform="translate(964 125)">
-      <rect width="176" height="138" rx="18" fill="#18283d" stroke="#385579"/>
-      <circle cx="88" cy="43" r="23" fill="#213a5a"/>
-      <path d="M72 51V40m11 11V32m11 19V37m11 14V26" stroke="#79a7ff" stroke-width="4" stroke-linecap="round"/>
-      <text x="88" y="88" text-anchor="middle" fill="#e8f1ff" font-size="17" font-weight="700">Inspect + publish</text>
-      <text x="88" y="112" text-anchor="middle" fill="#93aabd" font-size="13">report every result</text>
-    </g>
-  </g>
-
-  <g font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="12" fill="#718f92">
-    <text x="60" y="300">tasks.private.jsonl</text>
-    <text x="286" y="300">prompts.public.jsonl</text>
-    <text x="512" y="300">responses.jsonl</text>
-    <text x="738" y="300">grades.jsonl</text>
-    <text x="964" y="300">report.html</text>
+    <text x="56" y="352" fill="#68757c" font-size="13">Private reference values remain separate from public prompts until the evaluation is complete.</text>
   </g>
 </svg>

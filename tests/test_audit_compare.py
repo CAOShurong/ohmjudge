@@ -82,6 +82,31 @@ class AuditTests(unittest.TestCase):
         )
         self.assertEqual("fail", result["status"])
 
+    def test_capture_protocol_can_be_strict(self) -> None:
+        result = audit_experiment(
+            self.tasks,
+            responses=self.responses,
+            require_protocol=True,
+        )
+        self.assertEqual("fail", result["status"])
+        self.assertIn("surface", result["protocol_coverage"][0]["missing"])
+
+        for response in self.responses:
+            response.metadata = {
+                "captured_at": "2026-08-05T00:00:00Z",
+                "surface": "web",
+                "settings": "default",
+                "tools": "disabled",
+                "retry_policy": "none",
+            }
+        result = audit_experiment(
+            self.tasks,
+            responses=self.responses,
+            require_protocol=True,
+        )
+        self.assertEqual("pass", result["status"])
+        self.assertEqual(len(self.responses), result["responses_with_complete_protocol"])
+
 
 class CompareTests(unittest.TestCase):
     def test_paired_counts_and_direction(self) -> None:

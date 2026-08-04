@@ -37,12 +37,21 @@ adds the answer contract. A public record cannot be passed to `grade`.
   "latency_ms": null,
   "usage": {},
   "error": null,
-  "metadata": {}
+  "metadata": {
+    "captured_at": "2026-08-05T02:10:00+00:00",
+    "surface": "ChatGPT web",
+    "settings": "default; visible model label recorded",
+    "tools": "disabled",
+    "retry_policy": "none",
+    "suite_commitment": "sha256:…"
+  }
 }
 ```
 
 Provider errors are records, not dropped rows. `error` contains a sanitized
-message; the response may then have empty `text`.
+message; the response may then have empty `text`. The five capture-protocol
+fields checked by `audit --require-protocol` are `captured_at`, `surface`,
+`settings`, `tools`, and `retry_policy`.
 
 ## Grade
 
@@ -103,9 +112,9 @@ Generator behavior is separately identified by `generator_version`.
 ## Audit output
 
 `ohmjudge audit` writes one JSON object containing the suite commitment, task,
-pack, template, model, response, and grade counts; per-model coverage; a
-recomputation verdict; warnings; and integrity errors. `status` is `pass` only
-when the `errors` list is empty.
+pack, template, model, response, and grade counts; per-model response and
+capture-protocol coverage; a recomputation verdict; warnings; and integrity
+errors. `status` is `pass` only when the `errors` list is empty.
 
 ## Comparison output
 
