@@ -10,6 +10,7 @@ from typing import Any
 
 from . import __version__
 from .audit import audit_experiment
+from .collector import render_collector
 from .compare import compare_models
 from .demo import build_demo
 from .generate import generate_tasks, suite_commitment
@@ -105,6 +106,13 @@ def _cmd_generate(args: argparse.Namespace) -> int:
 def _cmd_lab(args: argparse.Namespace) -> int:
     tasks = _tasks(args.tasks)
     path = render_lab(tasks, args.output)
+    print(path.resolve())
+    return 0
+
+
+def _cmd_collect(args: argparse.Namespace) -> int:
+    tasks = _tasks(args.tasks)
+    path = render_collector(tasks, args.output)
     print(path.resolve())
     return 0
 
@@ -271,6 +279,18 @@ def build_parser() -> argparse.ArgumentParser:
     lab.add_argument("--output", default="ohmjudge-lab.html")
     lab.set_defaults(func=_cmd_lab)
 
+    collect = commands.add_parser(
+        "collect",
+        help="build an answer-free offline response collector",
+        description=(
+            "Build a shareable offline collector with public prompts and a suite "
+            "commitment, but no reference answers, tolerances, or grading code."
+        ),
+    )
+    collect.add_argument("--tasks", required=True)
+    collect.add_argument("--output", default="ohmjudge-collector.html")
+    collect.set_defaults(func=_cmd_collect)
+
     run = commands.add_parser("run", help="run tasks through an optional model API")
     run.add_argument("--tasks", required=True)
     run.add_argument(
@@ -319,7 +339,8 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help=(
             "require captured_at, surface, settings, tools, and retry_policy "
-            "metadata on every response"
+            "metadata on every response; suite_commitment is also required and "
+            "must match the task file"
         ),
     )
     audit.add_argument("--output")
@@ -336,7 +357,9 @@ def build_parser() -> argparse.ArgumentParser:
     compare.add_argument("--output")
     compare.set_defaults(func=_cmd_compare)
 
-    demo = commands.add_parser("demo", help="build synthetic report and no-API lab")
+    demo = commands.add_parser(
+        "demo", help="build synthetic report, blind collector, and no-API lab"
+    )
     demo.add_argument("--output", default="demo")
     demo.add_argument("--seed", type=int, default=2026)
     demo.add_argument("--count", type=int, default=50)

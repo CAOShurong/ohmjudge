@@ -117,8 +117,20 @@ only when the difference is explicit in the report.
 
 ### Data handling
 
-The standalone lab embeds private expected answers so it can grade locally.
-Do not publish that HTML before collection if answer secrecy matters.
+Use `ohmjudge collect` for a blinded collection. Its standalone HTML embeds only
+the public task form and suite commitment, and computes no scores. It is safe to
+hand to a response collector under the benchmark's stated threat model. It does
+not prevent a collector who independently obtains the seed, generator, or
+private task file from reconstructing the answers.
+
+The separate `ohmjudge lab` command embeds private expected answers so it can
+grade locally. Use it for personal practice; do not publish or distribute that
+HTML before collection if answer secrecy matters.
+
+Every new response carries the suite commitment. A commitment prevents silent
+mixing of response files from different suites; it does not prove when a suite
+was created. Publish or timestamp the commitment before collection if timing is
+part of the claim.
 
 ## Reporting checklist
 

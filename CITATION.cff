@@ -8,8 +8,8 @@ authors:
 repository-code: "https://github.com/CAOShurong/ohmjudge"
 url: "https://github.com/CAOShurong/ohmjudge"
 license: MIT
-version: 0.2.0
-date-released: 2026-08-05
+version: 0.3.0
+date-released: 2026-08-11
 keywords:
   - large language models
   - electrical engineering

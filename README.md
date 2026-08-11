@@ -4,10 +4,12 @@
 
 OhmJudge generates fresh numerical electrical-engineering problems, gives the
 same committed prompts to any model, and grades answers locally with executable
-rules. Its default workflow needs **no API key**: copy a prompt into a model's
-ordinary web interface, paste the answer back, and export the evidence.
+rules. Its default workflow needs **no API key**: use an answer-free offline
+collector to copy prompts into a model's ordinary web interface, paste answers
+back, and export the evidence for later grading.
 
-[Live no-API lab](https://caoshurong.github.io/ohmjudge/demo/no-api-lab.html)
+[Answer-free collector](https://caoshurong.github.io/ohmjudge/demo/blind-collector.html)
+· [Personal no-API lab](https://caoshurong.github.io/ohmjudge/demo/no-api-lab.html)
 · [Synthetic report](https://caoshurong.github.io/ohmjudge/demo/report.html)
 · [Methodology](docs/METHODOLOGY.md)
 · [CI](https://github.com/CAOShurong/ohmjudge/actions/workflows/ci.yml)
@@ -26,7 +28,7 @@ judge?**
 
 - **fresh tasks** — deterministic generators create a new suite from a recorded seed;
 - **executable grading** — numeric answers, units, tolerances, and error categories are checked in Python;
-- **model-agnostic use** — the no-API lab works with any browser-based model;
+- **model-agnostic use** — the answer-free collector works with any browser-based model;
 - **auditable artifacts** — tasks, responses, grades, prices, and suite commitments are plain JSONL/JSON;
 - **useful diagnostics** — see domain accuracy, confidence intervals, cost, latency, error types, and the price–accuracy Pareto frontier.
 
@@ -38,17 +40,17 @@ It currently includes 50 task templates across ten EE domains.
 
 ## Install
 
-Install the signed-off v0.2.0 wheel directly from the GitHub Release:
+Install the v0.3.0 wheel directly from the GitHub Release:
 
 ```bash
-python -m pip install "https://github.com/CAOShurong/ohmjudge/releases/download/v0.2.0/ohmjudge-0.2.0-py3-none-any.whl"
+python -m pip install "https://github.com/CAOShurong/ohmjudge/releases/download/v0.3.0/ohmjudge-0.3.0-py3-none-any.whl"
 ohmjudge doctor
 ```
 
 Or install the exact tag from source:
 
 ```bash
-python -m pip install "git+https://github.com/CAOShurong/ohmjudge.git@v0.2.0"
+python -m pip install "git+https://github.com/CAOShurong/ohmjudge.git@v0.3.0"
 ```
 
 > [!NOTE]
@@ -75,16 +77,30 @@ ohmjudge generate \
   --output tasks.private.jsonl \
   --public-output prompts.public.jsonl
 
-# Build one self-contained HTML file. Open it in any browser.
-ohmjudge lab --tasks tasks.private.jsonl --output ohmjudge-lab.html
+# Build an answer-free, self-contained collector. It is safe to hand to the
+# person collecting responses because it contains no reference answers,
+# tolerances, or grading code.
+ohmjudge collect \
+  --tasks tasks.private.jsonl \
+  --output blind-collector.html
 ```
 
-In the lab:
+In the collector:
 
 1. record the web product, visible model label, date, settings, tools, and retry policy;
 2. copy the current prompt into the model's normal web chat;
 3. paste its answer back;
-4. grade locally and export `responses.jsonl`.
+4. export a checkpoint and grade it later with the private task file.
+
+Progress is saved in browser-local storage, and exported checkpoints can be
+imported on another machine. Every response is bound to the exact suite
+commitment. `audit` exits nonzero if responses from a different suite are
+mixed in. Protocol fields are stored per model label, so two web products do
+not silently inherit each other's settings.
+
+For a quick personal practice run, `ohmjudge lab --tasks tasks.private.jsonl`
+still provides live grading. That HTML embeds the private answer key and must
+not be shared before a secrecy-sensitive collection is finished.
 
 The model is instructed to return:
 
@@ -148,9 +164,9 @@ ohmjudge compare \
 ```
 
 `audit` recomputes every verdict and checks task coverage, capture-protocol
-metadata, duplicates, units, tolerances, and cross-file integrity. `compare`
-uses paired task outcomes and an exact two-sided McNemar test; it warns when the
-discordant sample is too small for a strong conclusion. See
+metadata, suite commitments, duplicates, units, tolerances, and cross-file
+integrity. `compare` uses paired task outcomes and an exact two-sided McNemar
+test; it warns when the discordant sample is too small for a strong conclusion. See
 [Running an experiment](docs/EXPERIMENTS.md).
 
 ## What is tested
@@ -200,7 +216,10 @@ Every generated task has:
 - an accepted unit and absolute/relative tolerance;
 - generator parameters for audit.
 
-`generate` also prints a SHA-256 suite commitment. Publish the commitment and public prompts before collecting answers; release the private task file after the evaluation window if you want others to audit your result.
+`generate` also prints a SHA-256 suite commitment. Publish the commitment and
+public prompts before collecting answers; the collector writes that commitment
+into every response. Release the private task file after the evaluation window
+if you want others to audit your result.
 
 Read the [methodology](docs/METHODOLOGY.md), [experiment guide](docs/EXPERIMENTS.md), [data schemas](docs/SCHEMA.md), and [competitive landscape](docs/COMPETITIVE-LANDSCAPE.md) before reporting a serious comparison.
 
@@ -211,6 +230,7 @@ src/ohmjudge/
 ├── packs/          # seeded EE task generators
 ├── providers/      # optional remote runners
 ├── audit.py         # cross-artifact integrity verification
+├── collector.py     # answer-free offline response collection
 ├── compare.py       # paired model comparison
 ├── generate.py     # suites and commitments
 ├── grade.py        # deterministic validator

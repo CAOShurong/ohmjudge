@@ -4,7 +4,7 @@ import unittest
 
 from ohmjudge.audit import audit_experiment
 from ohmjudge.compare import compare_models
-from ohmjudge.generate import generate_tasks
+from ohmjudge.generate import generate_tasks, suite_commitment
 from ohmjudge.grade import grade_responses
 from ohmjudge.models import GradeRecord, ModelResponse
 
@@ -98,6 +98,7 @@ class AuditTests(unittest.TestCase):
                 "settings": "default",
                 "tools": "disabled",
                 "retry_policy": "none",
+                "suite_commitment": suite_commitment(self.tasks),
             }
         result = audit_experiment(
             self.tasks,
@@ -105,7 +106,20 @@ class AuditTests(unittest.TestCase):
             require_protocol=True,
         )
         self.assertEqual("pass", result["status"])
-        self.assertEqual(len(self.responses), result["responses_with_complete_protocol"])
+        self.assertEqual(
+            len(self.responses), result["responses_with_complete_protocol"]
+        )
+        self.assertEqual(len(self.responses), result["response_commitments"]["matched"])
+
+    def test_response_from_a_different_suite_is_rejected(self) -> None:
+        other = generate_tasks(count=10, seed=999)
+        self.responses[0].metadata["suite_commitment"] = suite_commitment(other)
+
+        result = audit_experiment(self.tasks, responses=self.responses)
+
+        self.assertEqual("fail", result["status"])
+        self.assertEqual(1, result["response_commitments"]["mismatched"])
+        self.assertIn("does not match", " ".join(result["errors"]))
 
 
 class CompareTests(unittest.TestCase):

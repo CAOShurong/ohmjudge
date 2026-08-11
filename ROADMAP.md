@@ -4,7 +4,15 @@ The roadmap is organized by verifier depth, not by model marketing cycles.
 Items move into a release only when their expected behavior can be tested
 without asking another language model for the verdict.
 
-## 0.2 — richer deterministic tasks
+## Completed foundations
+
+- Fifty deterministic scalar task templates across ten EE domains.
+- Answer-free offline collection with checkpoint export and import.
+- Suite commitments bound to every newly collected response and enforced by
+  cross-artifact audit.
+- Strict capture-protocol validation and exact paired model comparison.
+
+## Next — richer deterministic tasks
 
 - Property-based generator sweeps for every pack.
 - Template-balanced sampling when arbitrary pack subsets are selected.
@@ -12,14 +20,14 @@ without asking another language model for the verdict.
 - CSV and Markdown summary export.
 - Experiment manifests with declared collection settings and immutable hashes.
 
-## 0.3 — simulator-backed evaluation
+## Later — simulator-backed evaluation
 
 - SPICE-backed DC operating-point and transient tasks.
 - Verilog testbench packs with bounded runtime and explicit tool versions.
 - Counterexample traces embedded in grade records.
 - Container recipes for reproducible optional simulator environments.
 
-## 0.4 — multimodal electrical engineering
+## Later — multimodal electrical engineering
 
 - Schematic rendering from generated circuit graphs.
 - Programmatic answer keys independent of the rendered image.
