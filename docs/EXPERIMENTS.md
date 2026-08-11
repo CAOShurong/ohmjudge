@@ -28,14 +28,27 @@ capabilities.
 ## 3. Collect without API access
 
 ```bash
-ohmjudge lab --tasks tasks.private.jsonl --output lab.html
+ohmjudge collect \
+  --tasks tasks.private.jsonl \
+  --output blind-collector.html
 ```
 
 Use one model label per visible product configuration. Do not silently merge
-answers from two modes under one label. Fill in the lab's capture-protocol fields
+answers from two modes under one label. Fill in the collector's protocol fields
 for product surface, visible settings, tools, and retry policy. The export adds
-those fields, a capture timestamp, and the suite commitment to every response.
-Export the response JSONL and preserve it unchanged.
+those fields, a capture timestamp, a capture-method marker, and the suite
+commitment to every response. Protocol fields are stored separately for each
+model label and switch with the selected model.
+
+The collector contains public prompts but no expected values, tolerances, or
+grading code. It saves progress in browser-local storage and supports JSONL
+checkpoint export and import, so a collector can pause or move machines without
+receiving the private task file. Export the final response JSONL and preserve it
+unchanged.
+
+`ohmjudge lab` remains available for personal practice and immediate feedback.
+Because that HTML embeds the private answer key, do not give it to a collector
+or publish it before a secrecy-sensitive collection is complete.
 
 ## 4. Grade and audit
 
@@ -55,9 +68,11 @@ ohmjudge audit \
 ```
 
 The audit checks duplicate and unknown references, expected-value finiteness,
-units, tolerances, per-model coverage, capture-protocol completeness, and
-deterministic recomputation of every supplied grade. Omit `--require-protocol`
-only for legacy response files; incomplete metadata then remains a warning.
+units, tolerances, per-model coverage, capture-protocol completeness, suite
+commitment agreement, and deterministic recomputation of every supplied grade.
+A mismatched suite commitment is always an integrity error. Omit
+`--require-protocol` only for legacy response files; incomplete metadata then
+remains a warning, but a present mismatched commitment still fails.
 
 ## 5. Compare paired outcomes
 

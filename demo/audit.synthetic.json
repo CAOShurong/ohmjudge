@@ -42,8 +42,23 @@
     "power",
     "signals"
   ],
+  "protocol_coverage": [],
+  "protocol_fields": [
+    "captured_at",
+    "surface",
+    "settings",
+    "tools",
+    "retry_policy",
+    "suite_commitment"
+  ],
   "request_errors": 0,
+  "response_commitments": {
+    "matched": 150,
+    "mismatched": 0,
+    "missing": 0
+  },
   "responses": 150,
+  "responses_with_complete_protocol": 150,
   "status": "pass",
   "suite_commitment": "sha256:400a6a264f39f6d2b50482d52a3720ed7209e4542c26fbc7cbe60134a4176291",
   "tasks": 50,

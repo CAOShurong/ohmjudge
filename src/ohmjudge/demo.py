@@ -5,6 +5,7 @@ import random
 from pathlib import Path
 
 from .audit import audit_experiment
+from .collector import render_collector
 from .compare import compare_models
 from .generate import generate_tasks, suite_commitment
 from .grade import grade_responses
@@ -27,6 +28,7 @@ def build_demo(
     root = Path(directory)
     root.mkdir(parents=True, exist_ok=True)
     tasks = generate_tasks(count=count, seed=seed)
+    commitment = suite_commitment(tasks)
     responses: list[ModelResponse] = []
     rng = random.Random(seed ^ 0x0A11CE)
     for provider, model, accuracy, latency, input_tokens, output_tokens in _PROFILES:
@@ -66,6 +68,7 @@ def build_demo(
                         "settings": "not-applicable",
                         "tools": "not-applicable",
                         "retry_policy": "none",
+                        "suite_commitment": commitment,
                     },
                 )
             )
@@ -116,6 +119,7 @@ def build_demo(
     comparison_path = root / "comparison.synthetic.json"
     report_path = root / "report.html"
     lab_path = root / "no-api-lab.html"
+    collector_path = root / "blind-collector.html"
     write_jsonl(tasks_path, (task.to_dict() for task in tasks))
     write_jsonl(prompts_path, (task.to_dict(public=True) for task in tasks))
     write_jsonl(responses_path, (response.to_dict() for response in responses))
@@ -154,6 +158,7 @@ def build_demo(
         price_metadata=price_metadata(prices),
     )
     render_lab(tasks, lab_path)
+    render_collector(tasks, collector_path)
     return {
         "tasks": tasks_path,
         "prompts": prompts_path,
@@ -163,5 +168,6 @@ def build_demo(
         "comparison": comparison_path,
         "report": report_path,
         "lab": lab_path,
+        "collector": collector_path,
         "pricing": pricing_path,
     }

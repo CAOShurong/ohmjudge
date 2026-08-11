@@ -3,9 +3,14 @@ from __future__ import annotations
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
+from .generate import suite_commitment
 from .io import read_jsonl, write_jsonl
 from .models import ModelResponse, Task
 from .providers import BaseProvider
+
+
+class _SuiteCommitmentMismatch(ValueError):
+    pass
 
 
 def run_tasks(
@@ -18,6 +23,18 @@ def run_tasks(
 ) -> list[ModelResponse]:
     if concurrency < 1:
         raise ValueError("concurrency must be at least 1")
+    commitment = suite_commitment(tasks)
+
+    def bind_commitment(response: ModelResponse) -> ModelResponse:
+        recorded = response.metadata.get("suite_commitment")
+        if recorded not in (None, "", commitment):
+            raise _SuiteCommitmentMismatch(
+                "provider response belongs to a different task suite: "
+                f"{response.task_id}"
+            )
+        response.metadata["suite_commitment"] = commitment
+        return response
+
     completed: dict[str, ModelResponse] = {}
     if resume_from and Path(resume_from).exists():
         for record in read_jsonl(resume_from):
@@ -28,11 +45,17 @@ def run_tasks(
                 )
             if response.task_id in completed:
                 raise ValueError(f"resume file repeats task {response.task_id}")
-            completed[response.task_id] = response
+            try:
+                completed[response.task_id] = bind_commitment(response)
+            except _SuiteCommitmentMismatch as exc:
+                raise ValueError(
+                    f"resume file belongs to a different task suite: {response.task_id}"
+                ) from exc
     pending = [task for task in tasks if task.id not in completed]
 
     def call(task: Task) -> ModelResponse:
-        return provider.request(task_id=task.id, prompt=task.prompt, model=model)
+        response = provider.request(task_id=task.id, prompt=task.prompt, model=model)
+        return bind_commitment(response)
 
     if concurrency == 1:
         for task in pending:
@@ -44,12 +67,15 @@ def run_tasks(
                 task = futures[future]
                 try:
                     completed[task.id] = future.result()
+                except _SuiteCommitmentMismatch:
+                    raise
                 except Exception as exc:
                     completed[task.id] = ModelResponse(
                         task_id=task.id,
                         provider=provider.name,
                         model=model,
                         error=f"runner error: {exc}",
+                        metadata={"suite_commitment": commitment},
                     )
     return [completed[task.id] for task in tasks if task.id in completed]
 

@@ -3,7 +3,6 @@ name: CI
 on:
   push:
     branches: [main]
-    tags: ["v*"]
   pull_request:
   workflow_dispatch:
 
@@ -12,47 +11,66 @@ permissions:
 
 jobs:
   test:
+    name: ${{ matrix.os }} · Python ${{ matrix.python }}
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest]
-        python: ["3.11", "3.13"]
-    runs-on: ${{ matrix.os }}
+        include:
+          - { os: ubuntu-latest, python: "3.11" }
+          - { os: ubuntu-latest, python: "3.12" }
+          - { os: ubuntu-latest, python: "3.13" }
+          - { os: ubuntu-latest, python: "3.14" }
+          - { os: windows-latest, python: "3.11" }
+          - { os: windows-latest, python: "3.14" }
+          - { os: macos-latest, python: "3.14" }
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-python@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: ${{ matrix.python }}
-      - name: Install
+      - name: Install the package
         run: python -m pip install .
-      - name: Unit tests
+      - name: Unit and documentation tests
         run: python -m unittest discover -s tests -v
-      - name: Smoke-test CLI and deterministic artifacts
+      - name: Exercise the installed CLI
         run: |
           ohmjudge doctor
-          ohmjudge generate --count 50 --seed 2026 --output tasks.private.jsonl --public-output prompts.public.jsonl
-          ohmjudge lab --tasks tasks.private.jsonl --output ohmjudge-lab.html
-          ohmjudge demo --count 50 --seed 2026 --output build/demo
+          ohmjudge generate --count 12 --seed 2026 --output tasks.private.jsonl --public-output prompts.public.jsonl
+          ohmjudge collect --tasks tasks.private.jsonl --output blind-collector.html
+          ohmjudge lab --tasks tasks.private.jsonl --output personal-lab.html
+          ohmjudge demo --count 12 --seed 2026 --output build/demo
 
-  package:
+  lint:
+    name: Lint and format
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-python@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: "3.13"
-      - name: Build and inspect distributions
-        run: |
-          python -m pip install --upgrade build twine
-          python -m build
-          python -m twine check dist/*
-      - name: Clean-wheel installation smoke test
+      - run: python -m pip install --upgrade ruff
+      - run: ruff check .
+      - run: ruff format --check .
+
+  package:
+    name: Package builds and is installable
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.13"
+      - run: python -m pip install --upgrade build twine
+      - run: python -m build
+      - run: python -m twine check --strict dist/*
+      - name: Install and run the wheel in a clean environment
         run: |
           python -m venv clean-install
           clean-install/bin/python -m pip install dist/*.whl
           clean-install/bin/ohmjudge doctor
-          clean-install/bin/ohmjudge generate --count 10 --seed 2026 --output /tmp/tasks.jsonl
-      - uses: actions/upload-artifact@v7
+          clean-install/bin/ohmjudge collect --tasks demo/tasks.private.jsonl --output clean-collector.html
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: ohmjudge-distributions
           path: dist/

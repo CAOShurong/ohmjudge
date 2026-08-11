@@ -49,9 +49,15 @@ adds the answer contract. A public record cannot be passed to `grade`.
 ```
 
 Provider errors are records, not dropped rows. `error` contains a sanitized
-message; the response may then have empty `text`. The five capture-protocol
+message; the response may then have empty `text`. The six capture-protocol
 fields checked by `audit --require-protocol` are `captured_at`, `surface`,
-`settings`, `tools`, and `retry_policy`.
+`settings`, `tools`, `retry_policy`, and `suite_commitment`.
+
+New API-runner, replay, lab, and answer-free collector responses carry the
+canonical commitment for the exact private task file. A present commitment that
+does not match the audited task file is an integrity error even when
+`--require-protocol` is omitted. Legacy responses without a commitment can be
+audited in non-strict mode with a warning.
 
 ## Grade
 
@@ -113,8 +119,9 @@ Generator behavior is separately identified by `generator_version`.
 
 `ohmjudge audit` writes one JSON object containing the suite commitment, task,
 pack, template, model, response, and grade counts; per-model response and
-capture-protocol coverage; a recomputation verdict; warnings; and integrity
-errors. `status` is `pass` only when the `errors` list is empty.
+capture-protocol coverage; matched, missing, and mismatched response-commitment
+counts; a recomputation verdict; warnings; and integrity errors. `status` is
+`pass` only when the `errors` list is empty.
 
 ## Comparison output
 

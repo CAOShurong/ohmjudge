@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="OhmJudge is a zero-dependency toolkit for fresh, auditable electrical-engineering model evaluations. No API required.">
+  <meta name="description" content="OhmJudge is a zero-dependency toolkit for fresh, auditable electrical-engineering model evaluations with answer-free offline collection. No API required.">
   <meta name="theme-color" content="#fbfaf7">
   <title>OhmJudge — auditable EE model evaluation</title>
   <style>
@@ -37,9 +37,10 @@
       <div>
         <div class="kicker">Open research software · electrical engineering</div>
         <h1>Measure a model. Keep the evidence.</h1>
-        <p class="lede">OhmJudge builds a fresh, committed suite of EE calculations, collects answers from any web interface, and grades values and units with local Python rules.</p>
+        <p class="lede">OhmJudge builds a fresh, committed suite of EE calculations, collects answers from any web interface without exposing the answer key, and grades values and units later with local Python rules.</p>
         <div class="actions">
-          <a class="button" href="demo/no-api-lab.html">Open the no-API lab</a>
+          <a class="button" href="demo/blind-collector.html">Open the answer-free collector</a>
+          <a class="button secondary" href="demo/no-api-lab.html">Open the personal lab</a>
           <a class="button secondary" href="demo/report.html">Inspect a synthetic report</a>
         </div>
         <div class="micro">Python 3.11+ · zero runtime dependencies · MIT License · no account or API key required</div>
@@ -72,7 +73,7 @@
       <div class="workflow">
         <article class="stage"><span class="num">01 / GENERATE</span><h3>Fresh suite</h3><p>Seeded generators vary physical parameters while preserving the governing equations.</p><span class="artifact">tasks.private.jsonl</span></article>
         <article class="stage"><span class="num">02 / COMMIT</span><h3>Freeze intent</h3><p>SHA-256 records the exact suite before model answers are collected.</p><span class="artifact">prompts.public.jsonl</span></article>
-        <article class="stage"><span class="num">03 / COLLECT</span><h3>Any surface</h3><p>Use a web product, optional API adapter, or a replayed response set.</p><span class="artifact">responses.jsonl</span></article>
+        <article class="stage"><span class="num">03 / COLLECT</span><h3>Without the key</h3><p>Use the answer-free collector, an optional API adapter, or a replayed response set.</p><span class="artifact">responses.jsonl</span></article>
         <article class="stage"><span class="num">04 / GRADE</span><h3>Local rules</h3><p>Normalize units, apply declared tolerances, and classify concrete failure modes.</p><span class="artifact">grades.jsonl</span></article>
         <article class="stage"><span class="num">05 / AUDIT</span><h3>Verify evidence</h3><p>Check protocol metadata, coverage, duplicates, and deterministic recomputation.</p><span class="artifact">audit.json</span></article>
       </div>
@@ -142,8 +143,8 @@
 
     <section class="shell">
       <div class="callout">
-        <div><h2>Run the complete workflow in one local HTML file.</h2><p>The public demo uses fictional model labels and synthetic responses. It demonstrates the interface and evidence pipeline; it does not claim a real leaderboard result.</p></div>
-        <a class="button" href="demo/no-api-lab.html">Launch the lab</a>
+        <div><h2>Collect responses without handing over the answer key.</h2><p>The standalone collector contains public prompts and the suite commitment, but no expected values, tolerances, scores, network calls, or grading code. The separate report remains synthetic and makes no model-ranking claim.</p></div>
+        <a class="button" href="demo/blind-collector.html">Launch the collector</a>
       </div>
     </section>
   </main>

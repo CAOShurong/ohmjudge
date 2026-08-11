@@ -13,6 +13,8 @@ they are not evidence about any real model.
 - `synthetic-pricing.json` contains fictional prices.
 - `report.html` is the interactive analysis.
 - `no-api-lab.html` is the copy/paste evaluation interface.
+- `blind-collector.html` is the answer-free collector recommended for a
+  blinded response-collection workflow.
 
 Regenerate all files from source:
 
@@ -20,5 +22,7 @@ Regenerate all files from source:
 ohmjudge demo --output demo --count 50 --seed 2026
 ```
 
-The generated HTML files are self-contained. Download and open either file in a
-browser; no server or network connection is required.
+The generated HTML files are self-contained. Download and open any of them in a
+browser; no server or network connection is required. The lab includes the
+private answer key for local grading. The blind collector includes only public
+prompts and the suite commitment.

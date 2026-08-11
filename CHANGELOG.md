@@ -6,7 +6,28 @@ All notable changes are documented here. The format follows
 
 ## [Unreleased]
 
-## [0.2.0] - 2026-08-05
+## [0.3.0] - 2026-08-11
+
+### Added
+
+- An answer-free, self-contained `collect` workflow for manual web-product
+  experiments, with browser-local resume and JSONL checkpoint export/import.
+- Suite-commitment binding on collector, lab, replay, and API-runner response
+  records.
+- Cross-platform Python CI, CodeQL analysis, and pinned GitHub Actions
+  dependencies.
+
+### Changed
+
+- Audits now report matched, missing, and mismatched response commitments.
+- A present mismatched commitment is always an integrity error; strict protocol
+  mode also requires the commitment field.
+- The public demo and project site lead with blind collection while retaining
+  the answer-bearing lab for personal practice.
+- Release automation now tests before publishing, verifies tag/version parity,
+  builds distributions once, writes checksums, and creates attestations.
+
+## [0.2.0] - 2026-08-04
 
 ### Added
 
@@ -36,6 +57,7 @@ All notable changes are documented here. The format follows
 - A responsive project site with a generated no-API lab and synthetic report.
 - Synthetic demo artifacts, schemas, methodology, and contribution guides.
 
-[Unreleased]: https://github.com/CAOShurong/ohmjudge/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/CAOShurong/ohmjudge/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/CAOShurong/ohmjudge/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/CAOShurong/ohmjudge/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/CAOShurong/ohmjudge/releases/tag/v0.1.0

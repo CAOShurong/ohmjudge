@@ -31,6 +31,7 @@ def audit_experiment(
 ) -> dict[str, Any]:
     errors: list[str] = []
     warnings: list[str] = []
+    expected_commitment = suite_commitment(tasks)
     task_ids: set[str] = set()
     templates: set[tuple[str, str]] = set()
 
@@ -64,12 +65,16 @@ def audit_experiment(
         "settings",
         "tools",
         "retry_policy",
+        "suite_commitment",
     )
     protocol_missing: dict[tuple[str, str], dict[str, int]] = defaultdict(
         lambda: defaultdict(int)
     )
     protocol_complete = 0
     request_errors = 0
+    commitment_matches = 0
+    commitment_missing = 0
+    commitment_mismatches = 0
     for response in response_rows:
         key = _response_key(response)
         if key in response_keys:
@@ -81,6 +86,17 @@ def audit_experiment(
         if response.task_id not in task_ids:
             errors.append(f"response references unknown task: {response.task_id}")
         response_models[(response.provider, response.model)].add(response.task_id)
+        response_commitment = response.metadata.get("suite_commitment")
+        if response_commitment in (None, ""):
+            commitment_missing += 1
+        elif response_commitment == expected_commitment:
+            commitment_matches += 1
+        else:
+            commitment_mismatches += 1
+            errors.append(
+                f"{response.provider}/{response.model}/{response.task_id}: "
+                "response suite commitment does not match the task file"
+            )
         missing_fields = [
             field
             for field in protocol_fields
@@ -164,7 +180,7 @@ def audit_experiment(
 
     return {
         "status": "pass" if not errors else "fail",
-        "suite_commitment": suite_commitment(tasks),
+        "suite_commitment": expected_commitment,
         "tasks": len(tasks),
         "packs": sorted({task.pack for task in tasks}),
         "pack_count": len({task.pack for task in tasks}),
@@ -175,6 +191,11 @@ def audit_experiment(
         "coverage": coverage,
         "protocol_fields": list(protocol_fields),
         "responses_with_complete_protocol": protocol_complete,
+        "response_commitments": {
+            "matched": commitment_matches,
+            "missing": commitment_missing,
+            "mismatched": commitment_mismatches,
+        },
         "protocol_coverage": protocol_coverage,
         "grades": len(supplied_grade_rows),
         "grades_match_recomputation": grade_match,
