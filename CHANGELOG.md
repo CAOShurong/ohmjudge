@@ -6,6 +6,13 @@ All notable changes are documented here. The format follows
 
 ## [Unreleased]
 
+### Fixed
+
+- Keep megaohm and milliohm distinct after ordinary capitalization. `MOhm` and
+  `MOHM` previously folded to milliohm and were graded 1e9 off.
+- Read JSON/JSONL as UTF-8 with an optional BOM so a Windows-saved suite still
+  parses.
+
 ## [0.3.0] - 2026-08-11
 
 ### Added

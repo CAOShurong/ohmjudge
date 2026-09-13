@@ -13,17 +13,8 @@ class UnitSpec:
 
 
 def _key(value: str) -> str:
-    stripped = value.strip()
-    resistance_prefixes = {
-        "mΩ": "milliohm",
-        "mohm": "milliohm",
-        "MΩ": "megaohm",
-        "Mohm": "megaohm",
-        "kΩ": "kohm",
-    }
-    stripped = resistance_prefixes.get(stripped, stripped)
-    return (
-        stripped.lower()
+    stripped = (
+        value.strip()
         .replace("Ω", "ohm")
         .replace("ω", "ohm")
         .replace("μ", "u")
@@ -31,6 +22,11 @@ def _key(value: str) -> str:
         .replace(" ", "")
         .replace("_", "")
     )
+    # Mega vs milli ohm is encoded in the case of M/m. Folding first would
+    # make MOhm, MOHM, and mohm the same key and mis-grade by 1e9.
+    if re.fullmatch(r"M(?:ohm)s?", stripped, flags=re.IGNORECASE):
+        return "megaohm" if stripped[:1] == "M" else "milliohm"
+    return stripped.lower()
 
 
 _UNITS: dict[str, UnitSpec] = {}

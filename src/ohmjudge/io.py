@@ -27,7 +27,7 @@ def content_hash(records: Iterable[dict[str, Any]]) -> str:
 
 
 def read_jsonl(path: str | os.PathLike[str]) -> Iterator[dict[str, Any]]:
-    with Path(path).open("r", encoding="utf-8") as handle:
+    with Path(path).open("r", encoding="utf-8-sig") as handle:
         for line_number, line in enumerate(handle, start=1):
             stripped = line.strip()
             if not stripped:
@@ -67,7 +67,7 @@ def write_jsonl(
 
 
 def read_json(path: str | os.PathLike[str]) -> dict[str, Any]:
-    value = json.loads(Path(path).read_text(encoding="utf-8"))
+    value = json.loads(Path(path).read_text(encoding="utf-8-sig"))
     if not isinstance(value, dict):
         raise ValueError(f"{path}: expected a JSON object")
     return value

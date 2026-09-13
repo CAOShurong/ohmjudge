@@ -34,6 +34,9 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(1e6, convert_value(1.0, "MΩ", "ohm"))
         self.assertEqual(1e-3, convert_value(1.0, "mohm", "ohm"))
         self.assertEqual(1e6, convert_value(1.0, "Mohm", "ohm"))
+        self.assertEqual(1e6, convert_value(1.0, "MOhm", "ohm"))
+        self.assertEqual(1e6, convert_value(1.0, "MOHM", "ohm"))
+        self.assertEqual(1e-3, convert_value(1.0, "mOhm", "ohm"))
 
     def test_extended_units_convert(self) -> None:
         self.assertEqual(1000.0, convert_value(1.0, "kW", "W"))

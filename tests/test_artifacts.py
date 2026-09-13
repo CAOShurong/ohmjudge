@@ -10,11 +10,18 @@ from ohmjudge.cli import main
 from ohmjudge.collector import render_collector
 from ohmjudge.demo import build_demo
 from ohmjudge.generate import generate_tasks, suite_commitment
-from ohmjudge.io import write_jsonl
+from ohmjudge.io import read_jsonl, write_jsonl
 from ohmjudge.lab import render_lab
 
 
 class ArtifactTests(unittest.TestCase):
+    def test_jsonl_reader_accepts_a_utf8_bom(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "tasks.jsonl"
+            path.write_bytes(b'\xef\xbb\xbf{"id":"t1","ok":true}\n')
+            records = list(read_jsonl(path))
+        self.assertEqual([{"id": "t1", "ok": True}], records)
+
     def test_lab_is_self_contained_and_no_api(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             output = Path(directory) / "lab.html"
